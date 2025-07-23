@@ -1,26 +1,57 @@
-# user create automation
+# Okta User Creator
 
+This tool automates the creation of new user accounts in Okta based on ticket information. It helps streamline the onboarding process by automatically creating Okta accounts with the correct user information.
 
+## Features
 
-## Getting started
+- Automatically extracts user information from tickets
+- Creates Okta user accounts with proper naming conventions
+- Handles email generation based on user's name
+- Includes safety features like test mode
+- Provides clear feedback on creation status
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Setup
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/filevine/it-security/projects/user-create-automation.git
-git branch -M main
-git push -uf origin main
+1. Clone this repository:
+```bash
+git clone https://gitlab.com/filevine/it-security/projects/user-create-automation.git
+cd user-create-automation
 ```
 
-## Integrate with your tools
+2. Create a `config.py` file with your Okta credentials:
+```python
+OKTA_API_TOKEN = "your-api-token"
+OKTA_ORG_URL = "your-okta-org-url"
+```
+
+3. Install required Python packages:
+```bash
+pip install requests
+```
+
+## Usage
+
+1. Run in test mode (processes only the first user):
+```bash
+python okta_batch_create.py
+```
+
+2. Run for all users (after validating test mode works):
+   - Open `okta_batch_create.py`
+   - Change `test_mode=True` to `test_mode=False` at the bottom of the file
+   - Run the script again
+
+## Output Meanings
+
+- ✅ Created: User was successfully created in Okta
+- ⚠️ Already exists: User account already exists or has invalid data
+- ❌ Failed: Creation failed (error details will be shown)
+
+## Security Notes
+
+- The `config.py` file is excluded from Git to protect sensitive credentials
+- Always run in test mode first to validate changes
+- Keep your Okta API token secure
 
 - [ ] [Set up project integrations](https://gitlab.com/filevine/it-security/projects/user-create-automation/-/settings/integrations)
 
