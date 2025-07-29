@@ -1,7 +1,8 @@
 # okta_batch_create.py
 
+import json
 import requests
-from config import OKTA_API_TOKEN, OKTA_ORG_URL, getApiToken
+from config import OKTA_ORG_URL, get_okta_token
 from ticket_extractor import fetch_tickets, filter_onboarding_users
 
 
@@ -12,15 +13,41 @@ def build_okta_payload(user):
     last_name = " ".join(parts[1:]) if len(parts) > 1 else ""
     work_email = f"{first_name.lower()}{last_name.lower()}@filevine.com"
 
+    # Format phone number as xxx-xxx-xxxx
+    phone = user.get("phone", "")
+    if phone:
+        # Strip to just digits
+        phone_digits = ''.join(filter(str.isdigit, phone))
+        if len(phone_digits) >= 10:
+            # Format as xxx-xxx-xxxx
+            phone = f"{phone_digits[-10:-7]}-{phone_digits[-7:-4]}-{phone_digits[-4:]}"
+
+    # Get manager name parts (already in "lastname, firstname" format from ticket_extractor)
+    manager = user.get("manager_name", "")
+
     payload = {
         "profile": {
             "firstName": first_name,
             "lastName": last_name,
+            "displayName": f"{first_name} {last_name}",
             "email": work_email,
             "login": work_email,
-            "mobilePhone": user.get("phone", ""),
+            "mobilePhone": phone,
+            "secondEmail": user.get("personal_email", ""),
+            "streetAddress": user.get("streetAddress", ""),  # This includes apartment number
+            "city": user.get("city", ""),
+            "state": user.get("state", "UT"),  # Default to UT
+            "zipCode": user.get("zipCode", ""),
+            "countryCode": "US",  # Default to US
             "department": user.get("department", ""),
-            "title": user.get("title", "")
+            "title": user.get("title", ""),
+            "managerId": user.get("manager_email", ""),  # Using manager's email as ID
+            "manager": manager,  # Already formatted as "lastname, firstname"
+            "preferredLanguage": "en",
+            "timezone": "America/Denver",  # Default timezone for Utah
+            "organization": "Filevine",
+            "swRole": "Requester",
+            "primary": "false"
         }
     }
     return payload, work_email
@@ -29,7 +56,12 @@ def build_okta_payload(user):
 def create_okta_user(payload, headers, work_email):
     """POST a single user to Okta and log the result."""
     url = f"{OKTA_ORG_URL}/api/v1/users?activate=true"
+    print("\n📋 Sending to Okta:")
+    print(json.dumps(payload, indent=2))
+    
     response = requests.post(url, headers=headers, json=payload, timeout=30)
+    print(f"\n🔍 Response from Okta ({response.status_code}):")
+    print(response.text)
 
     if response.status_code in (200, 201):
         print(f"✅ Created: {work_email}")
@@ -38,13 +70,9 @@ def create_okta_user(payload, headers, work_email):
         print(f"⚠️ Already exists or invalid: {work_email}")
     else:
         print(f"❌ Failed: {work_email} — {response.status_code}")
-        print(response.text)
 
 
 def main(test_mode: bool = True):
-
-    getApiToken()
-
     """Fetch tickets, parse users, and create them in Okta.
 
     If *test_mode* is True, only the first user is processed so you can
@@ -57,8 +85,10 @@ def main(test_mode: bool = True):
         print("⚠️ No onboarding users found. Exiting.")
         return
 
+    # Get Okta API token
+    okta_token = get_okta_token()
     headers = {
-        "Authorization": f"SSWS {OKTA_API_TOKEN}",
+        "Authorization": f"SSWS {okta_token}",
         "Content-Type": "application/json",
         "Accept": "application/json"
     }
