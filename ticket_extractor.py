@@ -36,48 +36,55 @@ def parse_address(address: str) -> Dict[str, str]:
     
     if not address:
         return result
-        
     # Split by commas for parts (street, city, state zip)
     parts = [p.strip() for p in address.split(',')]
-    
-    if len(parts) >= 2:
-        # Handle street address and apartment
-        street = parts[0]
-        # Look for apartment indicators
-        apt_indicators = ['apt', 'apartment', '#', 'unit', 'ste', 'suite']
-        
-        # First try to find apartment number with common formats
-        apt_num = None
-        street_parts = street.lower().split()
-        for i, part in enumerate(street_parts):
-            if part in apt_indicators and i + 1 < len(street_parts):
-                apt_num = street_parts[i + 1]
-                # Remove apartment parts from street
-                street = ' '.join(street_parts[:i] + street_parts[i+2:])
-                break
-            elif part.startswith('#'):
-                apt_num = part[1:]
-                # Remove apartment part from street
-                street = ' '.join(street_parts[:i] + street_parts[i+1:])
-                break
-        
-        # Clean up street address
-        result["streetAddress"] = street.strip()
-        if apt_num:
-            result["streetAddress"] = f"{result['streetAddress']} #{apt_num}"
-            
-        # City
-        result["city"] = parts[1].strip()
-        
-        # Handle state and zip if present
-        if len(parts) > 2:
-            state_zip = parts[2].strip().split()
-            if len(state_zip) >= 2:
-                result["state"] = state_zip[0].upper()
-                result["zipCode"] = state_zip[-1]
-                
+    # Example: '89 E 200 S Apt 512, Salt Lake City, UT 84111'
+    if len(parts) >= 5:
+        # Format: street, apt, city, state, zip
+        result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
+        result["city"] = parts[2]
+        result["state"] = parts[3].strip().upper()
+        zip_code = parts[4].strip()
+        if len(zip_code) == 5 and zip_code.isdigit():
+            result["zipCode"] = zip_code
+    elif len(parts) >= 3:
+        # If second part is apartment/unit, combine with street
+        apt_keywords = ["Apt", "Apartment", "Unit", "Suite", "Ste", "#"]
+        second_is_apt = any(parts[1].strip().startswith(k) for k in apt_keywords)
+        if second_is_apt:
+            result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
+            city_part = parts[2]
+            state_zip_part = parts[3] if len(parts) > 3 else ""
+        else:
+            result["streetAddress"] = parts[0]
+            city_part = parts[1]
+            state_zip_part = parts[2]
+        result["city"] = city_part
+        # State and zip
+        state_zip_tokens = state_zip_part.split()
+        state = ""
+        zip_code = ""
+        for token in state_zip_tokens:
+            if len(token) == 2 and token.isalpha():
+                state = token.upper()
+            if len(token) == 5 and token.isdigit():
+                zip_code = token
+        if state:
+            result["state"] = state
+        if not zip_code and state_zip_tokens:
+            # Try last token if not found
+            last_token = state_zip_tokens[-1]
+            if len(last_token) == 5 and last_token.isdigit():
+                zip_code = last_token
+        if zip_code:
+            result["zipCode"] = zip_code
     return result
 
+def format_phone(phone: str) -> str:
+    digits = ''.join(filter(str.isdigit, phone))
+    if len(digits) == 10:
+        return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+    return phone
 def fetch_page(page: int, per_page: int) -> List[Dict]:
     params = {
         "per_page": per_page,
@@ -126,7 +133,7 @@ def parse_ticket(ticket: Dict) -> Dict:
             "ticket_created": ticket.get("created_at", "Unknown"),
             "preferredLanguage": "en",  # Set English as preferred language for all users
             "organization": "Filevine",  # Set organization for all users
-            "swRole": 1,  # 1 for Requester (0 would be Administrator)
+            "swRole": "Requester",  # Set to 'Requester' for Okta dropdown
             "primary": False,  # Always set to false as requested
             "timezone": "America/Denver",  # Default timezone for Filevine
             "countryCode": "US"  # Default country code
@@ -159,9 +166,9 @@ def parse_ticket(ticket: Dict) -> Dict:
                     out["department"] = val
                     found_fields.add("department")
                 elif label == "New Employee Phone Number":
-                    # Strip any non-digit characters from phone
-                    phone = ''.join(filter(str.isdigit, val))
-                    if len(phone) >= 10:  # Ensure we have at least a full phone number
+                    # Format phone for Okta output
+                    phone = format_phone(val)
+                    if phone:
                         out["phone"] = phone
                 elif label == "Start Date":
                     out["start_date"] = f.get("raw_value", val)

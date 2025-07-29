@@ -15,15 +15,23 @@ def build_okta_payload(user):
 
     # Format phone number as xxx-xxx-xxxx
     phone = user.get("phone", "")
-    if phone:
-        # Strip to just digits
-        phone_digits = ''.join(filter(str.isdigit, phone))
-        if len(phone_digits) >= 10:
-            # Format as xxx-xxx-xxxx
-            phone = f"{phone_digits[-10:-7]}-{phone_digits[-7:-4]}-{phone_digits[-4:]}"
+    digits = ''.join(filter(str.isdigit, phone))
+    if len(digits) == 10:
+        phone = f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
 
-    # Get manager name parts (already in "lastname, firstname" format from ticket_extractor)
-    manager = user.get("manager_name", "")
+    # Build address fields
+    street = user.get("streetAddress", "")
+    city = user.get("city", "")
+    state = user.get("state", "UT")
+    zip_code = user.get("zipCode", "")
+    country = user.get("countryCode", "US")
+
+    # Manager formatting
+    manager = user.get("manager", "")
+    if not manager:
+        manager_name = user.get("manager_name", "")
+        if manager_name:
+            manager = manager_name
 
     payload = {
         "profile": {
@@ -34,20 +42,18 @@ def build_okta_payload(user):
             "login": work_email,
             "mobilePhone": phone,
             "secondEmail": user.get("personal_email", ""),
-            "streetAddress": user.get("streetAddress", ""),  # This includes apartment number
-            "city": user.get("city", ""),
-            "state": user.get("state", "UT"),  # Default to UT
-            "zipCode": user.get("zipCode", ""),
-            "countryCode": "US",  # Default to US
+            "streetAddress": street,
+            "city": city,
+            "state": state,
+            "zipCode": zip_code,
+            "countryCode": country,
             "department": user.get("department", ""),
             "title": user.get("title", ""),
-            "managerId": user.get("manager_email", ""),  # Using manager's email as ID
-            "manager": manager,  # Already formatted as "lastname, firstname"
-            "preferredLanguage": "en",
-            "timezone": "America/Denver",  # Default timezone for Utah
-            "organization": "Filevine",
-            "swRole": "Requester",
-            "primary": "false"
+            "managerId": user.get("managerId", ""),
+            "manager": manager,
+            "preferredLanguage": user.get("preferredLanguage", "en"),
+            "timezone": user.get("timezone", "America/Denver"),
+            "organization": user.get("organization", "Filevine")
         }
     }
     return payload, work_email
