@@ -18,13 +18,16 @@ git clone https://gitlab.com/filevine/it-security/projects/user-create-automatio
 cd user-create-automation
 ```
 
-2. Create a `config.py` file with your Okta credentials:
-```python
-OKTA_API_TOKEN = "your-api-token"
-OKTA_ORG_URL = "your-okta-org-url"
+2. Ensure you have 1Password CLI installed and configured:
+```bash
+op --version  # Should show 1Password CLI version
 ```
 
-3. Install required Python packages:
+3. Make sure your Okta and Samanage API tokens are stored in 1Password:
+   - Okta token: `op://IT/okta-api-token/password`
+   - Samanage token: `op://IT/samanage-api-token/password`
+
+4. Install required Python packages:
 ```bash
 pip install requests
 ```
@@ -49,6 +52,8 @@ python okta_batch_create.py
 
 ## Security Notes
 
-- The `config.py` file is excluded from Git to protect sensitive credentials
+- All API credentials are securely stored in 1Password and retrieved via CLI
+- No hardcoded credentials exist in the codebase
+- The system uses 1Password's secure vault for token management
 - Always run in test mode first to validate changes
 - Keep your Okta API token secure

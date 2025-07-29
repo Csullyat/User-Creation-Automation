@@ -1,5 +1,5 @@
 # create_carson.py
-from typing import Dict, List
+from typing import Dict
 import json
 import requests
 from config import OKTA_ORG_URL, get_okta_token, get_samanage_token
@@ -33,7 +33,6 @@ def get_carson_ticket() -> Dict:
         return None
         
     tickets = resp.json()
-    print("DEBUG Response:", json.dumps(tickets, indent=2))
     if not tickets:
         print("❌ No ticket found for Carson")
         return None

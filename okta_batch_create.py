@@ -1,6 +1,5 @@
 # okta_batch_create.py
 
-import json
 import requests
 from config import OKTA_ORG_URL, get_okta_token
 from ticket_extractor import fetch_tickets, filter_onboarding_users
@@ -13,26 +12,6 @@ def build_okta_payload(user):
     last_name = " ".join(parts[1:]) if len(parts) > 1 else ""
     work_email = f"{first_name.lower()}{last_name.lower()}@filevine.com"
 
-    # Format phone number as xxx-xxx-xxxx
-    phone = user.get("phone", "")
-    digits = ''.join(filter(str.isdigit, phone))
-    if len(digits) == 10:
-        phone = f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
-
-    # Build address fields
-    street = user.get("streetAddress", "")
-    city = user.get("city", "")
-    state = user.get("state", "UT")
-    zip_code = user.get("zipCode", "")
-    country = user.get("countryCode", "US")
-
-    # Manager formatting
-    manager = user.get("manager", "")
-    if not manager:
-        manager_name = user.get("manager_name", "")
-        if manager_name:
-            manager = manager_name
-
     payload = {
         "profile": {
             "firstName": first_name,
@@ -40,20 +19,22 @@ def build_okta_payload(user):
             "displayName": f"{first_name} {last_name}",
             "email": work_email,
             "login": work_email,
-            "mobilePhone": phone,
+            "mobilePhone": user.get("phone", ""),
             "secondEmail": user.get("personal_email", ""),
-            "streetAddress": street,
-            "city": city,
-            "state": state,
-            "zipCode": zip_code,
-            "countryCode": country,
+            "streetAddress": user.get("streetAddress", ""),
+            "city": user.get("city", ""),
+            "state": user.get("state", "UT"),
+            "zipCode": user.get("zipCode", ""),
+            "countryCode": user.get("countryCode", "US"),
             "department": user.get("department", ""),
             "title": user.get("title", ""),
             "managerId": user.get("managerId", ""),
-            "manager": manager,
-            "preferredLanguage": user.get("preferredLanguage", "en"),
-            "timezone": user.get("timezone", "America/Denver"),
-            "organization": user.get("organization", "Filevine")
+            "manager": user.get("manager_name", ""),
+            "preferredLanguage": "en",
+            "timezone": "America/Denver",
+            "organization": "Filevine",
+            "swrole": "Requester",
+            "primary": True
         }
     }
     return payload, work_email
@@ -62,28 +43,24 @@ def build_okta_payload(user):
 def create_okta_user(payload, headers, work_email):
     """POST a single user to Okta and log the result."""
     url = f"{OKTA_ORG_URL}/api/v1/users?activate=true"
-    print("\n📋 Sending to Okta:")
-    print(json.dumps(payload, indent=2))
+    
+    # Debug: Show zip code specifically
+    zip_code = payload.get("profile", {}).get("zipCode", "")
+    print(f"🏠 Zip code being sent: '{zip_code}'")
     
     response = requests.post(url, headers=headers, json=payload, timeout=30)
-    print(f"\n🔍 Response from Okta ({response.status_code}):")
-    print(response.text)
 
     if response.status_code in (200, 201):
         print(f"✅ Created: {work_email}")
     elif response.status_code == 400 and "E0000001" in response.text:
         # E0000001 often indicates a duplicate or validation error
-        print(f"⚠️ Already exists or invalid: {work_email}")
+        print(f"⚠️ Already exists: {work_email}")
     else:
         print(f"❌ Failed: {work_email} — {response.status_code}")
 
 
-def main(test_mode: bool = True):
-    """Fetch tickets, parse users, and create them in Okta.
-
-    If *test_mode* is True, only the first user is processed so you can
-    validate the flow safely.
-    """
+def main():
+    """Fetch tickets, parse users, and create them in Okta."""
     tickets = fetch_tickets()
     users = filter_onboarding_users(tickets)
 
@@ -99,9 +76,7 @@ def main(test_mode: bool = True):
         "Accept": "application/json"
     }
 
-    iterable = users[:1] if test_mode else users
-
-    for user in iterable:
+    for user in users:
         # Preview before hitting the API
         print(f"\n🔍 Previewing user: {user['name']} — {user.get('title', '')}")
         payload, work_email = build_okta_payload(user)
@@ -109,5 +84,4 @@ def main(test_mode: bool = True):
 
 
 if __name__ == "__main__":
-    # Set test_mode=False once you've validated everything works.
-    main(test_mode=True)
+    main()

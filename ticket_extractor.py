@@ -25,59 +25,41 @@ STATE_IDS = [
 ACTIVE_STATES = {"New", "Assigned", "Auto-Assigned"}
 
 def parse_address(address: str) -> Dict[str, str]:
-    """Parse an address string into components, handling apartments correctly."""
-    result = {
-        "streetAddress": "",
-        "city": "",
-        "state": "",
-        "zipCode": "",
-        "countryCode": "US"  # Default to US
-    }
+    """Parse an address string into components."""
+    result = {"streetAddress": "", "city": "", "state": "UT", "zipCode": "", "countryCode": "US"}
     
     if not address:
         return result
-    # Split by commas for parts (street, city, state zip)
+    
+    # Split by commas
     parts = [p.strip() for p in address.split(',')]
-    # Example: '89 E 200 S Apt 512, Salt Lake City, UT 84111'
-    if len(parts) >= 5:
-        # Format: street, apt, city, state, zip
-        result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
-        result["city"] = parts[2]
-        result["state"] = parts[3].strip().upper()
-        zip_code = parts[4].strip()
-        if len(zip_code) == 5 and zip_code.isdigit():
-            result["zipCode"] = zip_code
-    elif len(parts) >= 3:
-        # If second part is apartment/unit, combine with street
+    
+    if len(parts) >= 3:
+        # Handle apartment in street address (combine first two parts if second looks like apt)
         apt_keywords = ["Apt", "Apartment", "Unit", "Suite", "Ste", "#"]
-        second_is_apt = any(parts[1].strip().startswith(k) for k in apt_keywords)
-        if second_is_apt:
+        if len(parts) > 3 and any(parts[1].strip().startswith(k) for k in apt_keywords):
             result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
-            city_part = parts[2]
-            state_zip_part = parts[3] if len(parts) > 3 else ""
+            result["city"] = parts[2]
+            # Look for state and zip in remaining parts
+            for part in parts[3:]:
+                tokens = part.split()
+                for token in tokens:
+                    if len(token) == 2 and token.isalpha():
+                        result["state"] = token.upper()
+                    elif len(token) == 5 and token.isdigit():
+                        result["zipCode"] = token
         else:
             result["streetAddress"] = parts[0]
-            city_part = parts[1]
-            state_zip_part = parts[2]
-        result["city"] = city_part
-        # State and zip
-        state_zip_tokens = state_zip_part.split()
-        state = ""
-        zip_code = ""
-        for token in state_zip_tokens:
-            if len(token) == 2 and token.isalpha():
-                state = token.upper()
-            if len(token) == 5 and token.isdigit():
-                zip_code = token
-        if state:
-            result["state"] = state
-        if not zip_code and state_zip_tokens:
-            # Try last token if not found
-            last_token = state_zip_tokens[-1]
-            if len(last_token) == 5 and last_token.isdigit():
-                zip_code = last_token
-        if zip_code:
-            result["zipCode"] = zip_code
+            result["city"] = parts[1]
+            # Look for state and zip in remaining parts
+            for part in parts[2:]:
+                tokens = part.split()
+                for token in tokens:
+                    if len(token) == 2 and token.isalpha():
+                        result["state"] = token.upper()
+                    elif len(token) == 5 and token.isdigit():
+                        result["zipCode"] = token
+    
     return result
 
 def format_phone(phone: str) -> str:
@@ -103,7 +85,7 @@ def fetch_page(page: int, per_page: int) -> List[Dict]:
 
     return resp.json()
 
-def fetch_tickets(per_page: int = 100, max_pages: int = 60, workers: int = 30) -> List[Dict]:
+def fetch_tickets(per_page: int = 100, max_pages: int = 20, workers: int = 15) -> List[Dict]:
     all_tickets = []
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = [executor.submit(fetch_page, page, per_page) for page in range(1, max_pages + 1)]
@@ -133,8 +115,8 @@ def parse_ticket(ticket: Dict) -> Dict:
             "ticket_created": ticket.get("created_at", "Unknown"),
             "preferredLanguage": "en",  # Set English as preferred language for all users
             "organization": "Filevine",  # Set organization for all users
-            "swRole": "Requester",  # Set to 'Requester' for Okta dropdown
-            "primary": False,  # Always set to false as requested
+            "swrole": "Requester",  # Set to 'Requester' for Okta dropdown
+            "primary": True,  # Always set to true as requested
             "timezone": "America/Denver",  # Default timezone for Filevine
             "countryCode": "US"  # Default country code
         }
@@ -217,7 +199,7 @@ def parse_ticket(ticket: Dict) -> Dict:
         # Validate required fields
         missing_fields = required_fields - found_fields
         if missing_fields:
-            print(f"⚠️ Ticket {out['ticket_number']} missing required fields: {', '.join(missing_fields)}")
+            # print(f"⚠️ Ticket {out['ticket_number']} missing required fields: {', '.join(missing_fields)}")
             return {}  # Return empty dict for invalid tickets
 
         return out
@@ -237,7 +219,7 @@ def filter_onboarding_users(tickets: List[Dict]) -> List[Dict]:
     filtered = [t for t in tickets if should_parse(t)]
 
     users = []
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {executor.submit(parse_ticket, t): t for t in filtered}
         for future in as_completed(futures):
             try:
