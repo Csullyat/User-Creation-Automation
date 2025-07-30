@@ -40,19 +40,25 @@ def parse_address(address: str) -> Dict[str, str]:
         if len(parts) > 3 and any(parts[1].strip().startswith(k) for k in apt_keywords):
             result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
             result["city"] = parts[2]
-            state_zip = parts[3]
+            # Look for state and zip in remaining parts
+            for part in parts[3:]:
+                tokens = part.split()
+                for token in tokens:
+                    if len(token) == 2 and token.isalpha():
+                        result["state"] = token.upper()
+                    elif len(token) == 5 and token.isdigit():
+                        result["zipCode"] = token
         else:
             result["streetAddress"] = parts[0]
             result["city"] = parts[1]
-            state_zip = parts[2]
-        
-        # Extract state and zip from last part
-        tokens = state_zip.split()
-        for token in tokens:
-            if len(token) == 2 and token.isalpha():
-                result["state"] = token.upper()
-            elif len(token) == 5 and token.isdigit():
-                result["zipCode"] = token
+            # Look for state and zip in remaining parts
+            for part in parts[2:]:
+                tokens = part.split()
+                for token in tokens:
+                    if len(token) == 2 and token.isalpha():
+                        result["state"] = token.upper()
+                    elif len(token) == 5 and token.isdigit():
+                        result["zipCode"] = token
     
     return result
 
@@ -79,7 +85,7 @@ def fetch_page(page: int, per_page: int) -> List[Dict]:
 
     return resp.json()
 
-def fetch_tickets(per_page: int = 100, max_pages: int = 20, workers: int = 30) -> List[Dict]:
+def fetch_tickets(per_page: int = 100, max_pages: int = 20, workers: int = 15) -> List[Dict]:
     all_tickets = []
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = [executor.submit(fetch_page, page, per_page) for page in range(1, max_pages + 1)]
@@ -104,7 +110,6 @@ def parse_ticket(ticket: Dict) -> Dict:
             raise ValueError("Ticket is missing required field: number")
             
         out = {
-            "ticket_id": ticket.get("id"),  # Add ticket ID for direct updates
             "ticket_number": ticket.get("number"),
             "ticket_state": ticket.get("state", "Unknown"),
             "ticket_created": ticket.get("created_at", "Unknown"),
@@ -214,7 +219,7 @@ def filter_onboarding_users(tickets: List[Dict]) -> List[Dict]:
     filtered = [t for t in tickets if should_parse(t)]
 
     users = []
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {executor.submit(parse_ticket, t): t for t in filtered}
         for future in as_completed(futures):
             try:
