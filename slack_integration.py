@@ -29,13 +29,13 @@ def send_slack_notification(user_name: str, work_email: str, title: str, ticket_
         # Create a nice formatted message
         message = {
             "channel": f"#{SLACK_CHANNEL}",
-            "text": f"✅ New Okta User Created",
+            "text": f" New Okta User Created",
             "blocks": [
                 {
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "✅ Okta User Created Successfully"
+                        "text": " Okta User Created Successfully"
                     }
                 },
                 {
@@ -89,12 +89,12 @@ def send_slack_notification(user_name: str, work_email: str, title: str, ticket_
                 print(f"📱 Slack notification sent for {user_name}")
                 return True
             else:
-                print(f"⚠️ Slack API error: {result.get('error', 'Unknown error')}")
+                print(f" Slack API error: {result.get('error', 'Unknown error')}")
                 return False
         else:
-            print(f"⚠️ Slack HTTP error: {response.status_code}")
+            print(f" Slack HTTP error: {response.status_code}")
             return False
             
     except Exception as e:
-        print(f"⚠️ Slack notification failed: {str(e)}")
+        print(f" Slack notification failed: {str(e)}")
         return False

@@ -32,7 +32,7 @@ $Principal = New-ScheduledTaskPrincipal -UserId "Cody" -LogonType Interactive -R
 # Register the task with multiple triggers
 Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Triggers -Settings $Settings -Principal $Principal -Description "Automated Okta user creation from SolarWinds tickets - runs 3x daily"
 
-Write-Host "✅ Task created successfully!"
+Write-Host " Task created successfully!"
 Write-Host "Task Name: $TaskName"
 Write-Host "Schedule: Daily at 10:00 AM, 2:00 PM, and 5:00 PM"
 Write-Host "Command: $PythonPath $ScriptPath"

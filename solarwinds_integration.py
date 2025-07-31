@@ -33,15 +33,15 @@ def update_ticket_status_direct(ticket_id: str, ticket_number: str, new_status: 
         )
         
         if update_response.status_code in (200, 204):
-            print(f"✅ Updated ticket {ticket_number} status to '{new_status}'")
+            print(f" Updated ticket {ticket_number} status to '{new_status}'")
             return True
         else:
-            print(f"❌ Failed to update ticket {ticket_number}: {update_response.status_code}")
+            print(f" Failed to update ticket {ticket_number}: {update_response.status_code}")
             print(f"Response: {update_response.text}")
             return False
             
     except Exception as e:
-        print(f"❌ Error updating ticket {ticket_number}: {str(e)}")
+        print(f" Error updating ticket {ticket_number}: {str(e)}")
         return False
 
 def add_ticket_comment_direct(ticket_id: str, ticket_number: str, comment: str) -> bool:
@@ -68,9 +68,9 @@ def add_ticket_comment_direct(ticket_id: str, ticket_number: str, comment: str) 
             print(f"💬 Added comment to ticket {ticket_number}")
             return True
         else:
-            print(f"❌ Failed to add comment to ticket {ticket_number}")
+            print(f" Failed to add comment to ticket {ticket_number}")
             return False
             
     except Exception as e:
-        print(f"❌ Error adding comment to ticket {ticket_number}: {str(e)}")
+        print(f" Error adding comment to ticket {ticket_number}: {str(e)}")
         return False

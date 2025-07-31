@@ -1,11 +1,14 @@
 # ticket_extractor.py
 
 import requests
+import logging
 from typing import List, Dict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Imports and API configuration
 from config import get_samanage_token
+
+logger = logging.getLogger(__name__)
 
 BASE_URL = "https://api.samanage.com"
 # Get the token once at module level
@@ -149,11 +152,12 @@ def fetch_page(page: int, per_page: int) -> List[Dict]:
     for sid in STATE_IDS:
         params.setdefault("state_id[]", []).append(sid)
 
-    print(f"📡 Fetching page {page}...")
+    # Only log to file, not console
+    logger.debug(f"📡 Fetching page {page}...")
     resp = requests.get(f"{BASE_URL}/incidents.json", headers=HEADERS, params=params)
 
     if resp.status_code != 200:
-        print(f"❌ Error on page {page}: {resp.status_code}: {resp.text}")
+        print(f" Error on page {page}: {resp.status_code}: {resp.text}")
         return []
 
     return resp.json()
@@ -167,9 +171,9 @@ def fetch_tickets(per_page: int = 100, max_pages: int = 20, workers: int = 30) -
                 incidents = future.result()
                 all_tickets.extend(incidents)
             except Exception as e:
-                print(f"⚠️ Thread error: {e}")
+                print(f" Thread error: {e}")
 
-    print(f"🧾 Total tickets fetched: {len(all_tickets)}")
+    print(f"Total tickets fetched: {len(all_tickets)}")
     return all_tickets
 
 def parse_ticket(ticket: Dict) -> Dict:
@@ -212,7 +216,7 @@ def parse_ticket(ticket: Dict) -> Dict:
                     found_fields.add("name")
                 elif label == "New Employee Personal Email Address":
                     if "@" not in val:
-                        print(f"⚠️ Invalid email format for ticket {out['ticket_number']}: {val}")
+                        print(f" Invalid email format for ticket {out['ticket_number']}: {val}")
                     else:
                         out["personal_email"] = val
                 elif label == "New Employee Title":
@@ -241,7 +245,7 @@ def parse_ticket(ticket: Dict) -> Dict:
                         # Split manager name into parts for Okta format
                         mgr_name_parts = manager_name.split()
                         if len(mgr_name_parts) < 2:
-                            print(f"⚠️ Invalid manager name format for ticket {out['ticket_number']}: {manager_name}")
+                            print(f" Invalid manager name format for ticket {out['ticket_number']}: {manager_name}")
                             continue
                             
                         mgr_first_name = mgr_name_parts[0]
@@ -251,16 +255,16 @@ def parse_ticket(ticket: Dict) -> Dict:
                         out["manager_name"] = f"{mgr_last_name}, {mgr_first_name}"
                         out["manager_email"] = mgr.get("email", "")
                     except Exception as e:
-                        print(f"⚠️ Error parsing manager info for ticket {out['ticket_number']}: {e}")
+                        print(f" Error parsing manager info for ticket {out['ticket_number']}: {e}")
                 elif label == "New Employee Mailing Address":
                     try:
                         # Parse address with our new function
                         address_parts = parse_address(val)
                         out.update(address_parts)
                     except Exception as e:
-                        print(f"⚠️ Error parsing address for ticket {out['ticket_number']}: {e}")
+                        print(f" Error parsing address for ticket {out['ticket_number']}: {e}")
             except Exception as e:
-                print(f"⚠️ Error parsing field {label} for ticket {out['ticket_number']}: {e}")
+                print(f" Error parsing field {label} for ticket {out['ticket_number']}: {e}")
                 continue
 
         # If name wasn't found in custom fields, try ticket name
@@ -273,12 +277,12 @@ def parse_ticket(ticket: Dict) -> Dict:
         # Validate required fields
         missing_fields = required_fields - found_fields
         if missing_fields:
-            # print(f"⚠️ Ticket {out['ticket_number']} missing required fields: {', '.join(missing_fields)}")
+            # print(f" Ticket {out['ticket_number']} missing required fields: {', '.join(missing_fields)}")
             return {}  # Return empty dict for invalid tickets
 
         return out
     except Exception as e:
-        print(f"❌ Critical error parsing ticket {ticket.get('number', 'Unknown')}: {str(e)}")
+        print(f" Critical error parsing ticket {ticket.get('number', 'Unknown')}: {str(e)}")
         return {}
 
     if "name" not in out:
@@ -301,9 +305,9 @@ def filter_onboarding_users(tickets: List[Dict]) -> List[Dict]:
                 if u and "title" in u and "department" in u:
                     users.append(u)
             except Exception as e:
-                print(f"⚠️ Parse error: {e}")
+                print(f" Parse error: {e}")
 
-    print(f"\n🎯 Final parsed onboarding users: {len(users)} of {len(tickets)} tickets")
+    print(f"\nFinal parsed onboarding users: {len(users)} of {len(tickets)} tickets")
     return users
 
 def print_users(users: List[Dict]):
@@ -320,4 +324,4 @@ if __name__ == "__main__":
         users = filter_onboarding_users(tickets)
         print_users(users)
     except Exception as e:
-        print(f"❌ Script error: {e}")
+        print(f" Script error: {e}")
