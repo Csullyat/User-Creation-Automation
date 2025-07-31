@@ -34,7 +34,7 @@ def build_okta_payload(user):
             "managerId": user.get("managerId", ""),
             "manager": user.get("manager_name", ""),
             "preferredLanguage": "en",
-            "timezone": "America/Denver",
+            "timezone": user.get("timezone", "America/Denver"),  # Use timezone from address parsing
             "organization": "Filevine",
             "swrole": "Requester",
             "primary": True

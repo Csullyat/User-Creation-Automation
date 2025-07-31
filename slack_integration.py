@@ -7,7 +7,13 @@ SLACK_CHANNEL = "codybot_notifications"
 
 def get_slack_token() -> str:
     """Get the Slack bot token from 1Password."""
-    return get_secret_from_1password("op://IT/slack-bot-token/password")
+    from config import get_secret_from_1password_service_account, get_secret_from_1password
+    try:
+        # Try service account first, fallback to regular CLI
+        return get_secret_from_1password_service_account("op://IT/slack-bot-token/password")
+    except:
+        print("Service account failed, falling back to regular 1Password CLI")
+        return get_secret_from_1password("op://IT/slack-bot-token/password")
 
 def send_slack_notification(user_name: str, work_email: str, title: str, ticket_number: str, ticket_id: str = None) -> bool:
     """Send a Slack notification about successful Okta user creation."""

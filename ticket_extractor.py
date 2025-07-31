@@ -25,41 +25,120 @@ STATE_IDS = [
 ACTIVE_STATES = {"New", "Assigned", "Auto-Assigned"}
 
 def parse_address(address: str) -> Dict[str, str]:
-    """Parse an address string into components."""
+    """Parse an address string into components, supporting both US and European formats."""
     result = {"streetAddress": "", "city": "", "state": "UT", "zipCode": "", "countryCode": "US"}
     
     if not address:
         return result
     
+    # Country name to ISO code mapping with timezones
+    country_mapping = {
+        "Slovakia": {"code": "SK", "timezone": "Europe/Bratislava"},
+        "Czech Republic": {"code": "CZ", "timezone": "Europe/Prague"}, 
+        "Czechia": {"code": "CZ", "timezone": "Europe/Prague"},
+        "United States": {"code": "US", "timezone": "America/Denver"},
+        "USA": {"code": "US", "timezone": "America/Denver"},
+        "US": {"code": "US", "timezone": "America/Denver"}
+    }
+    
     # Split by commas
     parts = [p.strip() for p in address.split(',')]
     
     if len(parts) >= 3:
-        # Handle apartment in street address (combine first two parts if second looks like apt)
-        apt_keywords = ["Apt", "Apartment", "Unit", "Suite", "Ste", "#"]
-        if len(parts) > 3 and any(parts[1].strip().startswith(k) for k in apt_keywords):
-            result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
-            result["city"] = parts[2]
-            state_zip = parts[3]
-        else:
-            result["streetAddress"] = parts[0]
-            result["city"] = parts[1]
-            state_zip = parts[2]
+        # Check if this looks like a European address (has a country at the end)
+        last_part = parts[-1].strip()
+        country_info = country_mapping.get(last_part)
+        is_european = country_info is not None and last_part not in ["US", "USA", "United States"]
         
-        # Extract state and zip from last part
-        tokens = state_zip.split()
-        for token in tokens:
-            if len(token) == 2 and token.isalpha():
-                result["state"] = token.upper()
-            elif len(token) == 5 and token.isdigit():
-                result["zipCode"] = token
+        if is_european:
+            # European format: "Street, Postal Code City, Country"
+            result["streetAddress"] = parts[0].strip()
+            result["countryCode"] = country_info["code"]
+            result["timezone"] = country_info["timezone"]
+            result["state"] = ""  # European addresses don't use state
+            
+            # Parse "Postal Code City" from the middle part
+            if len(parts) >= 2:
+                postal_city = parts[1].strip()
+                # Look for postal code pattern (digits with optional space)
+                import re
+                # Match postal codes like "821 06", "94911", "949 11"
+                postal_match = re.match(r'^(\d{3}\s?\d{2,3})\s+(.+)$', postal_city)
+                if postal_match:
+                    result["zipCode"] = postal_match.group(1).strip()
+                    result["city"] = postal_match.group(2).strip()
+                else:
+                    # Fallback: assume last word(s) are city, first are postal
+                    tokens = postal_city.split()
+                    if len(tokens) >= 2:
+                        # Find where postal code ends (first non-digit token)
+                        postal_tokens = []
+                        city_tokens = []
+                        found_city_start = False
+                        
+                        for token in tokens:
+                            if not found_city_start and (token.isdigit() or (len(token) <= 3 and token.isdigit())):
+                                postal_tokens.append(token)
+                            else:
+                                found_city_start = True
+                                city_tokens.append(token)
+                        
+                        if postal_tokens and city_tokens:
+                            result["zipCode"] = " ".join(postal_tokens)
+                            result["city"] = " ".join(city_tokens)
+                        else:
+                            result["city"] = postal_city  # Fallback
+        else:
+            # US format: handle existing logic
+            us_country_info = country_mapping.get("US")
+            if us_country_info:
+                result["timezone"] = us_country_info["timezone"]
+            
+            # Handle apartment in street address (combine first two parts if second looks like apt)
+            apt_keywords = ["Apt", "Apartment", "Unit", "Suite", "Ste", "#"]
+            if len(parts) > 3 and any(parts[1].strip().startswith(k) for k in apt_keywords):
+                result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
+                result["city"] = parts[2]
+                state_zip = parts[3]
+            else:
+                result["streetAddress"] = parts[0]
+                result["city"] = parts[1]
+                state_zip = parts[2]
+            
+            # Extract state and zip from last part
+            tokens = state_zip.split()
+            for token in tokens:
+                if len(token) == 2 and token.isalpha():
+                    result["state"] = token.upper()
+                elif len(token) == 5 and token.isdigit():
+                    result["zipCode"] = token
     
     return result
 
 def format_phone(phone: str) -> str:
+    """Format phone numbers with proper dashes for both US and international numbers."""
     digits = ''.join(filter(str.isdigit, phone))
+    
     if len(digits) == 10:
+        # US format: 555-123-4567
         return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+    elif len(digits) == 11 and digits.startswith('1'):
+        # US format with country code: 1-555-123-4567
+        return f"{digits[0]}-{digits[1:4]}-{digits[4:7]}-{digits[7:]}"
+    elif len(digits) == 12:
+        # International format (like Slovakia +421): 421-948-873-023
+        return f"{digits[:3]}-{digits[3:6]}-{digits[6:9]}-{digits[9:]}"
+    elif len(digits) >= 10:
+        # Generic international format - insert dashes every 3 digits after country code
+        # Assume first 1-3 digits are country code, rest in groups of 3
+        if len(digits) <= 13:
+            # For numbers 10-13 digits, try to format reasonably
+            if len(digits) == 11:
+                return f"{digits[:2]}-{digits[2:5]}-{digits[5:8]}-{digits[8:]}"
+            elif len(digits) == 13:
+                return f"{digits[:3]}-{digits[3:6]}-{digits[6:9]}-{digits[9:]}"
+    
+    # If we can't format it nicely, return original
     return phone
 def fetch_page(page: int, per_page: int) -> List[Dict]:
     params = {
@@ -112,8 +191,8 @@ def parse_ticket(ticket: Dict) -> Dict:
             "organization": "Filevine",  # Set organization for all users
             "swrole": "Requester",  # Set to 'Requester' for Okta dropdown
             "primary": True,  # Always set to true as requested
-            "timezone": "America/Denver",  # Default timezone for Filevine
-            "countryCode": "US"  # Default country code
+            "timezone": "America/Denver",  # Default timezone - will be overridden by address parsing
+            "countryCode": "US"  # Default country code - will be overridden by address parsing
         }
         
         # Track required fields to ensure they're all present
