@@ -98,9 +98,11 @@ Set up Windows Task Scheduler for 3x daily execution:
 - `solarwinds_integration.py` - Ticket updates
 - `slack_integration.py` - Notifications
 - `log_reporter.py` - Generate daily/weekly/monthly reports for management
+- `send_reports.py` - Send reports to Slack automatically
 - `get_okta_groups.py` - Helper to fetch group IDs for configuration
 - `get_credential.ps1` - Service account setup
 - `setup_task_scheduler.ps1` - Task Scheduler configuration
+- `setup_report_scheduler.ps1` - Automatic Slack reporting setup
 
 ## Logging & Reports
 
@@ -118,6 +120,27 @@ Generate reports for your boss with `log_reporter.py`:
 ```bash
 python log_reporter.py
 ```
+
+### Automatic Slack Reports
+Set up automatic report delivery to your Slack channel:
+
+```powershell
+.\setup_report_scheduler.ps1
+```
+
+**Automated Schedule:**
+- **Daily Report:** Every day at 6:00 PM
+- **Weekly Report:** Mondays at 9:00 AM  
+- **Monthly Report:** 1st of each month at 8:00 AM
+
+**Manual Slack Reports:**
+```bash
+python send_reports.py daily     # Send today's report
+python send_reports.py weekly    # Send 7-day summary
+python send_reports.py monthly   # Send monthly analysis
+```
+
+All reports are sent to the same Slack channel (`#codybot_notifications`) where user creation notifications appear.
 
 **Available Reports:**
 - **Daily Report** - Today's activity summary

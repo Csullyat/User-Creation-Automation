@@ -9,6 +9,7 @@ import re
 from datetime import datetime, timedelta
 from collections import defaultdict
 import glob
+from slack_integration import send_report_to_slack
 
 def parse_log_file(log_file_path):
     """Parse a single log file and extract key metrics."""
@@ -109,6 +110,67 @@ def generate_daily_report(date_str=None):
 """
     
     return report
+
+def send_daily_report_to_slack(date_str=None):
+    """Generate and send daily report to Slack."""
+    try:
+        report = generate_daily_report(date_str)
+        if "No log file found" in report:
+            print(f"No log file found for {date_str or 'today'}, skipping Slack report")
+            return False
+        
+        report_date = date_str or datetime.now().strftime('%Y-%m-%d')
+        success = send_report_to_slack(
+            report_title=f"Daily Report - {report_date}",
+            report_content=report,
+            report_type="Daily"
+        )
+        return success
+    except Exception as e:
+        print(f"Error sending daily report to Slack: {e}")
+        return False
+
+def send_weekly_report_to_slack():
+    """Generate and send weekly report to Slack."""
+    try:
+        report = generate_weekly_report()
+        if "No logs directory found" in report:
+            print("No logs directory found, skipping Slack report")
+            return False
+        
+        success = send_report_to_slack(
+            report_title="Weekly Report",
+            report_content=report,
+            report_type="Weekly"
+        )
+        return success
+    except Exception as e:
+        print(f"Error sending weekly report to Slack: {e}")
+        return False
+
+def send_monthly_report_to_slack(year=None, month=None):
+    """Generate and send monthly report to Slack."""
+    try:
+        report = generate_monthly_report(year, month)
+        if "No logs directory found" in report:
+            print("No logs directory found, skipping Slack report")
+            return False
+        
+        if not year or not month:
+            now = datetime.now()
+            year = now.year
+            month = now.month
+        
+        month_name = datetime(year, month, 1).strftime('%B %Y')
+        success = send_report_to_slack(
+            report_title=f"Monthly Report - {month_name}",
+            report_content=report,
+            report_type="Monthly"
+        )
+        return success
+    except Exception as e:
+        print(f"Error sending monthly report to Slack: {e}")
+        return False
 
 def generate_monthly_report(year=None, month=None):
     """Generate a comprehensive monthly report."""
@@ -448,9 +510,12 @@ def main():
         print("4. Monthly Report (current month)")
         print("5. Monthly Report (specific month)")
         print("6. Year-to-Date Summary")
-        print("7. Exit")
+        print("7. Send Daily Report to Slack")
+        print("8. Send Weekly Report to Slack")
+        print("9. Send Monthly Report to Slack")
+        print("10. Exit")
         
-        choice = input("\nEnter choice (1-7): ").strip()
+        choice = input("\nEnter choice (1-10): ").strip()
         
         if choice == "1":
             print(generate_daily_report())
@@ -468,6 +533,21 @@ def main():
         elif choice == "6":
             print(generate_year_to_date_summary())
         elif choice == "7":
+            if send_daily_report_to_slack():
+                print("Daily report sent to Slack successfully!")
+            else:
+                print("Failed to send daily report to Slack.")
+        elif choice == "8":
+            if send_weekly_report_to_slack():
+                print("Weekly report sent to Slack successfully!")
+            else:
+                print("Failed to send weekly report to Slack.")
+        elif choice == "9":
+            if send_monthly_report_to_slack():
+                print("Monthly report sent to Slack successfully!")
+            else:
+                print("Failed to send monthly report to Slack.")
+        elif choice == "10":
             break
         else:
             print("Invalid choice. Please try again.")
