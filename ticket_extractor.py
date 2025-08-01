@@ -29,7 +29,7 @@ ACTIVE_STATES = {"New", "Assigned", "Auto-Assigned"}
 
 def parse_address(address: str) -> Dict[str, str]:
     """Parse an address string into components, supporting both US and European formats."""
-    result = {"streetAddress": "", "city": "", "state": "UT", "zipCode": "", "countryCode": "US"}
+    result = {"streetAddress": "", "city": "", "state": "UT", "zipCode": "", "countryCode": "US", "timezone": "America/Denver"}
     
     if not address:
         return result
@@ -80,8 +80,76 @@ def parse_address(address: str) -> Dict[str, str]:
         "HI": "America/Honolulu"
     }
     
-    # Split by commas
+    # First try comma-separated format
     parts = [p.strip() for p in address.split(',')]
+    
+    # Handle 2-part comma format: "Street Address City, State Zipcode"
+    if len(parts) == 2:
+        import re
+        # Parse second part for state and zip: "TX 77406"
+        second_part = parts[1].strip()
+        state_zip_match = re.match(r'^([A-Z]{2})\s+(\d{5})$', second_part)
+        if state_zip_match:
+            state = state_zip_match.group(1)
+            zipcode = state_zip_match.group(2)
+            
+            # Parse first part for street and city: "1035 Pink Lily Lane Richmond"
+            first_part = parts[0].strip()
+            # Try to intelligently split street from city
+            # Look for common patterns - assume last 1-2 words before state are city
+            tokens = first_part.split()
+            if len(tokens) >= 2:
+                # Assume last word(s) are city, rest is street
+                # For "1035 Pink Lily Lane Richmond" - "Richmond" is likely city
+                city = tokens[-1]  # Last word as city
+                street = " ".join(tokens[:-1])  # Everything else as street
+                
+                result["streetAddress"] = street
+                result["city"] = city
+                result["state"] = state
+                result["zipCode"] = zipcode
+                result["countryCode"] = "US"
+                
+                # Set timezone based on state
+                if state in us_state_timezones:
+                    result["timezone"] = us_state_timezones[state]
+                else:
+                    result["timezone"] = "America/Denver"  # Default fallback
+                
+                return result
+    
+    # If no commas found or only 1 part, try space-separated parsing
+    if len(parts) == 1:
+        import re
+        
+        # Pattern: Fallback - assume last 3 tokens are city, state, zip
+        # For "1035 Pink Lily Lane Richmond TX 77406"
+        tokens = address.strip().split()
+        if len(tokens) >= 4:
+            # Take last 3 as city/state/zip, rest as street
+            zipcode = tokens[-1]
+            state = tokens[-2].upper()
+            city = tokens[-3]
+            street = " ".join(tokens[:-3])
+            
+            # Validate that we have state and zip in expected format
+            if len(state) == 2 and state.isalpha() and len(zipcode) == 5 and zipcode.isdigit():
+                result["streetAddress"] = street
+                result["city"] = city
+                result["state"] = state
+                result["zipCode"] = zipcode
+                result["countryCode"] = "US"
+                
+                # Set timezone based on state
+                if state in us_state_timezones:
+                    result["timezone"] = us_state_timezones[state]
+                else:
+                    result["timezone"] = "America/Denver"  # Default fallback
+                
+                return result
+        
+        # If that didn't work, parsing failed
+        raise ValueError(f"Unable to parse address format: {address}")
     
     if len(parts) >= 3:
         # Check if this looks like a European address (has a country at the end)
@@ -311,11 +379,19 @@ def parse_ticket(ticket: Dict) -> Dict:
                         print(f" Error parsing manager info for ticket {out['ticket_number']}: {e}")
                 elif label == "New Employee Mailing Address":
                     try:
-                        # Parse address with our new function
+                        # Parse address with our enhanced function
                         address_parts = parse_address(val)
                         out.update(address_parts)
+                        
+                        # Validate that address parsing was successful
+                        if (not address_parts.get("streetAddress") or 
+                            not address_parts.get("city") or 
+                            not address_parts.get("zipCode")):
+                            raise ValueError(f"Address parsing incomplete - missing required fields")
+                            
                     except Exception as e:
-                        print(f" Error parsing address for ticket {out['ticket_number']}: {e}")
+                        print(f" ERROR: Address parsing failed for ticket {out['ticket_number']}: {val} - {e}")
+                        # Mark as error but continue processing - will be caught in validation
             except Exception as e:
                 print(f" Error parsing field {label} for ticket {out['ticket_number']}: {e}")
                 continue
@@ -332,6 +408,14 @@ def parse_ticket(ticket: Dict) -> Dict:
         if missing_fields:
             # print(f" Ticket {out['ticket_number']} missing required fields: {', '.join(missing_fields)}")
             return {}  # Return empty dict for invalid tickets
+
+        # Validate address parsing was successful (if an address was provided)
+        # Check if we have essential address components
+        if ("streetAddress" in out and out["streetAddress"] == "" and 
+            "city" in out and out["city"] == "" and 
+            "zipCode" in out and out["zipCode"] == ""):
+            # This indicates address parsing likely failed completely
+            print(f" WARNING: Address parsing may have failed for ticket {out['ticket_number']} - all address fields empty")
 
         return out
     except Exception as e:
