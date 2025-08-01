@@ -92,13 +92,13 @@ def generate_daily_report(date_str=None):
     if stats['users_created']:
         report += " USERS CREATED:\n"
         for email, ticket in stats['users_created']:
-            report += f"  • {email} (Ticket #{ticket})\n"
+            report += f"  - {email} (Ticket #{ticket})\n"
         report += "\n"
     
     if stats['error_details']:
         report += " ERROR DETAILS:\n"
         for error in stats['error_details'][:5]:  # Show first 5 errors
-            report += f"  • {error}\n"
+            report += f"  - {error}\n"
         if len(stats['error_details']) > 5:
             report += f"  ... and {len(stats['error_details']) - 5} more errors\n"
         report += "\n"
@@ -279,14 +279,14 @@ def generate_monthly_report(year=None, month=None):
    Total Users Created: {monthly_stats['total_users_created']}
    Duplicate Attempts: {monthly_stats['total_duplicates']}
    Total Errors: {monthly_stats['total_errors']}
-  📅 Active Days: {monthly_stats['days_with_activity']}/{len(monthly_stats['daily_breakdown'])} days
-  � Working Days: {working_days}
+   Active Days: {monthly_stats['days_with_activity']}/{len(monthly_stats['daily_breakdown'])} days
+   Working Days: {working_days}
   
  PERFORMANCE METRICS:
    Daily Average: {monthly_stats['total_users_created'] / max(len(monthly_stats['daily_breakdown']), 1):.1f} users/day
    Working Day Average: {monthly_stats['total_users_created'] / max(working_days, 1):.1f} users/working day
    Success Rate: {(monthly_stats['total_users_created'] / max(monthly_stats['total_users_created'] + monthly_stats['total_errors'], 1) * 100):.1f}%
-  ⚡ System Reliability: {((monthly_stats['days_with_activity'] - len(monthly_stats['error_days'])) / max(monthly_stats['days_with_activity'], 1) * 100):.1f}%
+   System Reliability: {((monthly_stats['days_with_activity'] - len(monthly_stats['error_days'])) / max(monthly_stats['days_with_activity'], 1) * 100):.1f}%
 
 """
     
@@ -295,7 +295,7 @@ def generate_monthly_report(year=None, month=None):
         report += f" BUSIEST DAY: {busiest_date.strftime('%B %d, %Y')} ({monthly_stats['busiest_day']['count']} users)\n\n"
     
     # Weekly breakdown
-    report += "📅 WEEKLY BREAKDOWN:\n"
+    report += "WEEKLY BREAKDOWN:\n"
     for i, week_total in enumerate(monthly_stats['weekly_totals']):
         if week_total > 0:
             report += f"  Week {i+1}: {week_total} users created\n"
@@ -305,7 +305,7 @@ def generate_monthly_report(year=None, month=None):
     if monthly_stats['error_summary']:
         report += " ERROR ANALYSIS:\n"
         for error_type, count in monthly_stats['error_summary'].items():
-            report += f"  • {error_type}: {count}\n"
+            report += f"  - {error_type}: {count}\n"
         report += "\n"
     
     # Recent users created (last 15)
@@ -313,7 +313,7 @@ def generate_monthly_report(year=None, month=None):
         report += f" RECENT USERS CREATED ({len(monthly_stats['all_users_created'])} total):\n"
         recent_users = monthly_stats['all_users_created'][-15:]
         for email, ticket in recent_users:
-            report += f"  • {email} (Ticket #{ticket})\n"
+            report += f"  - {email} (Ticket #{ticket})\n"
         if len(monthly_stats['all_users_created']) > 15:
             report += f"  ... and {len(monthly_stats['all_users_created']) - 15} more users\n"
         report += "\n"
@@ -323,20 +323,20 @@ def generate_monthly_report(year=None, month=None):
         report += f" DAYS WITH ISSUES ({len(monthly_stats['error_days'])} days):\n"
         for error_day in monthly_stats['error_days'][-5:]:  # Show last 5 error days
             error_date = datetime.strptime(error_day['date'], '%Y-%m-%d')
-            report += f"  • {error_date.strftime('%b %d')}: {error_day['errors']} errors\n"
+            report += f"  - {error_date.strftime('%b %d')}: {error_day['errors']} errors\n"
             for detail in error_day['details']:
                 report += f"    - {detail[:80]}...\n"
         report += "\n"
     
     # Overall status assessment
     if monthly_stats['total_errors'] == 0:
-        status = "🌟 EXCELLENT - No errors detected"
+        status = "EXCELLENT - No errors detected"
     elif monthly_stats['total_errors'] <= monthly_stats['total_users_created'] * 0.05:  # Less than 5% error rate
-        status = " GOOD - Low error rate"
+        status = "GOOD - Low error rate"
     elif monthly_stats['total_errors'] <= monthly_stats['total_users_created'] * 0.15:  # Less than 15% error rate
-        status = " FAIR - Moderate error rate, monitor closely"
+        status = "FAIR - Moderate error rate, monitor closely"
     else:
-        status = " NEEDS ATTENTION - High error rate detected"
+        status = "NEEDS ATTENTION - High error rate detected"
     
     report += f"""
  MONTHLY ASSESSMENT:
@@ -345,9 +345,9 @@ def generate_monthly_report(year=None, month=None):
   Recommendation: {'Continue current operation' if monthly_stats['total_errors'] <= 3 else 'Review error patterns and consider system improvements'}
 
  ACTION ITEMS:
-  • {' No action required' if monthly_stats['total_errors'] == 0 else ' Investigate recurring error patterns'}
-  • {' Performance is optimal' if monthly_stats['total_users_created'] / max(working_days, 1) >= 1 else ' Consider process optimization for higher throughput'}
-  •  Schedule next month's review
+  - {' No action required' if monthly_stats['total_errors'] == 0 else ' Investigate recurring error patterns'}
+  - {' Performance is optimal' if monthly_stats['total_users_created'] / max(working_days, 1) >= 1 else ' Consider process optimization for higher throughput'}
+  - Schedule next month's review
 """
     
     return report
@@ -416,7 +416,7 @@ def generate_year_to_date_summary():
    Busiest Month: {ytd_stats['busiest_month']['month']} ({ytd_stats['busiest_month']['count']} users)
    Monthly Average: {ytd_stats['total_users_created'] / max(len(ytd_stats['monthly_breakdown']), 1):.1f} users
 
-📅 MONTHLY BREAKDOWN:
+MONTHLY BREAKDOWN:
 """
     
     for month_data in ytd_stats['monthly_breakdown']:
@@ -471,19 +471,19 @@ def generate_weekly_report():
    Total Users Created: {weekly_stats['total_users_created']}
    Total Duplicates: {weekly_stats['total_duplicates']}
    Total Errors: {weekly_stats['total_errors']}
-  📅 Days with Activity: {len(weekly_stats['daily_breakdown'])}
+   Days with Activity: {len(weekly_stats['daily_breakdown'])}
 
-📅 DAILY BREAKDOWN:
+DAILY BREAKDOWN:
 """
     
     for day in reversed(weekly_stats['daily_breakdown']):
-        status_icon = "" if day['errors'] == 0 else "" if day['errors'] < 3 else ""
+        status_icon = "" if day['errors'] == 0 else "[!]" if day['errors'] < 3 else "[!!]"
         report += f"  {day['date']}: {day['created']} created, {day['errors']} errors {status_icon}\n"
     
     if weekly_stats['all_users_created']:
         report += f"\n ALL USERS CREATED THIS WEEK ({len(weekly_stats['all_users_created'])}):\n"
         for email, ticket in weekly_stats['all_users_created'][-10:]:  # Show last 10
-            report += f"  • {email} (Ticket #{ticket})\n"
+            report += f"  - {email} (Ticket #{ticket})\n"
         if len(weekly_stats['all_users_created']) > 10:
             report += f"  ... and {len(weekly_stats['all_users_created']) - 10} more users\n"
     
@@ -492,7 +492,7 @@ def generate_weekly_report():
  PERFORMANCE METRICS:
    Average users/day: {avg_daily:.1f}
    Success rate: {((weekly_stats['total_users_created'] + weekly_stats['total_duplicates']) / max(weekly_stats['total_users_created'] + weekly_stats['total_duplicates'] + weekly_stats['total_errors'], 1) * 100):.1f}%
-  ⚡ Automation health: {' EXCELLENT' if weekly_stats['total_errors'] == 0 else ' GOOD' if weekly_stats['total_errors'] < 5 else ' NEEDS ATTENTION'}
+   Automation health: {' EXCELLENT' if weekly_stats['total_errors'] == 0 else ' GOOD' if weekly_stats['total_errors'] < 5 else ' NEEDS ATTENTION'}
 """
     
     return report

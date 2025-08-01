@@ -23,7 +23,7 @@ def update_ticket_status_direct(ticket_id: str, ticket_number: str, new_status: 
             }
         }
         
-        print(f"🔄 Updating ticket {ticket_number} to '{new_status}'...")
+        print(f"Updating ticket {ticket_number} to '{new_status}'...")
         
         update_response = requests.put(
             f"{SAMANAGE_BASE_URL}/incidents/{ticket_id}.json",
@@ -65,7 +65,7 @@ def add_ticket_comment_direct(ticket_id: str, ticket_number: str, comment: str) 
         )
         
         if comment_response.status_code in (200, 201):
-            print(f"💬 Added comment to ticket {ticket_number}")
+            print(f"Added comment to ticket {ticket_number}")
             return True
         else:
             print(f" Failed to add comment to ticket {ticket_number}")
