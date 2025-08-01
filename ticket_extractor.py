@@ -44,6 +44,42 @@ def parse_address(address: str) -> Dict[str, str]:
         "US": {"code": "US", "timezone": "America/Denver"}
     }
     
+    # US State to timezone mapping - comprehensive coverage of all 50 states
+    us_state_timezones = {
+        # Eastern Time Zone (UTC-5/-4)
+        "CT": "America/New_York", "DE": "America/New_York", "FL": "America/New_York",
+        "GA": "America/New_York", "IN": "America/New_York", "KY": "America/New_York",
+        "MA": "America/New_York", "MD": "America/New_York", "ME": "America/New_York",
+        "MI": "America/New_York", "NC": "America/New_York", "NH": "America/New_York",
+        "NJ": "America/New_York", "NY": "America/New_York", "OH": "America/New_York",
+        "PA": "America/New_York", "RI": "America/New_York", "SC": "America/New_York",
+        "TN": "America/New_York", "VA": "America/New_York", "VT": "America/New_York",
+        "WV": "America/New_York",
+        
+        # Central Time Zone (UTC-6/-5)
+        "AL": "America/Chicago", "AR": "America/Chicago", "IA": "America/Chicago",
+        "IL": "America/Chicago", "KS": "America/Chicago", "LA": "America/Chicago",
+        "MN": "America/Chicago", "MO": "America/Chicago", "MS": "America/Chicago",
+        "ND": "America/Chicago", "NE": "America/Chicago", "OK": "America/Chicago",
+        "SD": "America/Chicago", "TX": "America/Chicago", "WI": "America/Chicago",
+        
+        # Mountain Time Zone (UTC-7/-6)
+        "CO": "America/Denver", "ID": "America/Denver", "MT": "America/Denver", 
+        "NM": "America/Denver", "UT": "America/Denver", "WY": "America/Denver",
+        # Arizona doesn't observe DST
+        "AZ": "America/Phoenix",
+        
+        # Pacific Time Zone (UTC-8/-7)
+        "CA": "America/Los_Angeles", "NV": "America/Los_Angeles", 
+        "OR": "America/Los_Angeles", "WA": "America/Los_Angeles",
+        
+        # Alaska Time Zone (UTC-9/-8)
+        "AK": "America/Anchorage", 
+        
+        # Hawaii-Aleutian Time Zone (UTC-10/-9) - Hawaii doesn't observe DST
+        "HI": "America/Honolulu"
+    }
+    
     # Split by commas
     parts = [p.strip() for p in address.split(',')]
     
@@ -93,28 +129,45 @@ def parse_address(address: str) -> Dict[str, str]:
                             result["city"] = postal_city  # Fallback
         else:
             # US format: handle existing logic
-            us_country_info = country_mapping.get("US")
-            if us_country_info:
-                result["timezone"] = us_country_info["timezone"]
+            # Set default timezone - will be updated based on state
+            result["timezone"] = "America/Denver"  # Default fallback
             
-            # Handle apartment in street address (combine first two parts if second looks like apt)
-            apt_keywords = ["Apt", "Apartment", "Unit", "Suite", "Ste", "#"]
-            if len(parts) > 3 and any(parts[1].strip().startswith(k) for k in apt_keywords):
-                result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
-                result["city"] = parts[2]
-                state_zip = parts[3]
+            # Handle different US address formats
+            if len(parts) == 4:
+                # 4-part format: "Street, City, State, ZipCode"
+                result["streetAddress"] = parts[0].strip()
+                result["city"] = parts[1].strip()
+                result["state"] = parts[2].strip().upper()
+                # Update timezone based on state
+                if result["state"] in us_state_timezones:
+                    result["timezone"] = us_state_timezones[result["state"]]
+                # Last part should be just the zip code
+                zip_candidate = parts[3].strip()
+                if zip_candidate.isdigit() and len(zip_candidate) == 5:
+                    result["zipCode"] = zip_candidate
             else:
-                result["streetAddress"] = parts[0]
-                result["city"] = parts[1]
-                state_zip = parts[2]
-            
-            # Extract state and zip from last part
-            tokens = state_zip.split()
-            for token in tokens:
-                if len(token) == 2 and token.isalpha():
-                    result["state"] = token.upper()
-                elif len(token) == 5 and token.isdigit():
-                    result["zipCode"] = token
+                # 3-part format: "Street, City, State ZipCode" 
+                # Handle apartment in street address (combine first two parts if second looks like apt)
+                apt_keywords = ["Apt", "Apartment", "Unit", "Suite", "Ste", "#"]
+                if len(parts) > 3 and any(parts[1].strip().startswith(k) for k in apt_keywords):
+                    result["streetAddress"] = f"{parts[0]} {parts[1]}".strip()
+                    result["city"] = parts[2]
+                    state_zip = parts[3]
+                else:
+                    result["streetAddress"] = parts[0]
+                    result["city"] = parts[1]
+                    state_zip = parts[2]
+                
+                # Extract state and zip from last part
+                tokens = state_zip.split()
+                for token in tokens:
+                    if len(token) == 2 and token.isalpha():
+                        result["state"] = token.upper()
+                        # Update timezone based on state
+                        if result["state"] in us_state_timezones:
+                            result["timezone"] = us_state_timezones[result["state"]]
+                    elif len(token) == 5 and token.isdigit():
+                        result["zipCode"] = token
     
     return result
 

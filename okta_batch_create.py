@@ -203,7 +203,7 @@ def main(test_mode: bool = True):
             logger.info(f"Processing user {i}/{len(iterable)}: {user['name']} — {user.get('title', 'No Title')} (Ticket #{user.get('ticket_number')})")
             
             # Process user
-            print(f"\n� Processing: {user['name']} ({user.get('title', 'No Title')})")
+            print(f"\nProcessing: {user['name']} ({user.get('title', 'No Title')})")
             payload, work_email = build_okta_payload(user)
             ticket_id = user.get('ticket_id')
             ticket_number = user.get('ticket_number')

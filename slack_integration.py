@@ -86,7 +86,7 @@ def send_slack_notification(user_name: str, work_email: str, title: str, ticket_
         if response.status_code == 200:
             result = response.json()
             if result.get("ok"):
-                print(f"📱 Slack notification sent for {user_name}")
+                print(f"Slack notification sent for {user_name}")
                 return True
             else:
                 print(f" Slack API error: {result.get('error', 'Unknown error')}")
