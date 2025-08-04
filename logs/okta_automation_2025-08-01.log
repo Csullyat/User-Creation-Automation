@@ -50,3 +50,13 @@
 2025-08-01 16:37:03,806 - INFO - Errors encountered: 0
 2025-08-01 16:37:03,806 - INFO - Total users processed: 1
 2025-08-01 16:37:03,807 - INFO - ============================================================
+2025-08-01 17:00:11,337 - INFO - ============================================================
+2025-08-01 17:00:11,339 - INFO - OKTA AUTOMATION STARTED - 2025-08-01 17:00:11
+2025-08-01 17:00:11,339 - INFO - ============================================================
+2025-08-01 17:00:11,341 - INFO - Retrieving Okta API credentials...
+2025-08-01 17:00:14,266 - INFO - Validating department-to-group mappings...
+2025-08-01 17:00:24,809 - INFO - All 19 group mappings validated successfully
+2025-08-01 17:00:24,809 - INFO - All group mappings validated successfully
+2025-08-01 17:00:24,809 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-01 17:00:28,948 - INFO - Found 0 onboarding users to process
+2025-08-01 17:00:28,948 - INFO - No onboarding users found. Exiting.

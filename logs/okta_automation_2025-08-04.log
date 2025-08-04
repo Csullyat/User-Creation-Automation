@@ -1,0 +1,10 @@
+2025-08-04 10:00:08,021 - INFO - ============================================================
+2025-08-04 10:00:08,021 - INFO - OKTA AUTOMATION STARTED - 2025-08-04 10:00:08
+2025-08-04 10:00:08,021 - INFO - ============================================================
+2025-08-04 10:00:08,022 - INFO - Retrieving Okta API credentials...
+2025-08-04 10:00:10,356 - INFO - Validating department-to-group mappings...
+2025-08-04 10:00:18,318 - INFO - All 19 group mappings validated successfully
+2025-08-04 10:00:18,320 - INFO - All group mappings validated successfully
+2025-08-04 10:00:18,320 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-04 10:00:22,824 - INFO - Found 0 onboarding users to process
+2025-08-04 10:00:22,824 - INFO - No onboarding users found. Exiting.
