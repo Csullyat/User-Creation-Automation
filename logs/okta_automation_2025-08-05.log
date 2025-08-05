@@ -1,0 +1,36 @@
+2025-08-05 10:00:07,544 - INFO - ============================================================
+2025-08-05 10:00:07,544 - INFO - OKTA AUTOMATION STARTED - 2025-08-05 10:00:07
+2025-08-05 10:00:07,547 - INFO - ============================================================
+2025-08-05 10:00:07,547 - INFO - Retrieving Okta API credentials...
+2025-08-05 10:00:09,777 - INFO - Validating department-to-group mappings...
+2025-08-05 10:00:19,284 - INFO - All 19 group mappings validated successfully
+2025-08-05 10:00:19,284 - INFO - All group mappings validated successfully
+2025-08-05 10:00:19,286 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-05 10:00:23,685 - INFO - Found 0 onboarding users to process
+2025-08-05 10:00:23,685 - INFO - No onboarding users found. Exiting.
+2025-08-05 14:00:06,574 - INFO - ============================================================
+2025-08-05 14:00:06,574 - INFO - OKTA AUTOMATION STARTED - 2025-08-05 14:00:06
+2025-08-05 14:00:06,574 - INFO - ============================================================
+2025-08-05 14:00:06,574 - INFO - Retrieving Okta API credentials...
+2025-08-05 14:00:08,672 - INFO - Validating department-to-group mappings...
+2025-08-05 14:00:16,725 - INFO - All 19 group mappings validated successfully
+2025-08-05 14:00:16,726 - INFO - All group mappings validated successfully
+2025-08-05 14:00:16,728 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-05 14:00:21,177 - INFO - Found 1 onboarding users to process
+2025-08-05 14:00:21,177 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-05 14:00:21,177 - INFO - Processing user 1/1: Rechelle Romero — Email Support Specialist (Ticket #61613)
+2025-08-05 14:00:29,017 - INFO - SUCCESS: Created Okta user rechelleromero@filevine.com (Ticket #61613)
+2025-08-05 14:00:29,694 - INFO - Added user 00uyluab4wWOHPUxh297 to group 00ginuyrp8icRLDsb297
+2025-08-05 14:00:29,694 - INFO - Successfully assigned user 00uyluab4wWOHPUxh297 to all 1 groups for department 'Chat Support'
+2025-08-05 14:00:29,694 - INFO - Successfully assigned rechelleromero@filevine.com to groups for department 'Chat Support'
+2025-08-05 14:00:32,894 - INFO -  Updated ticket #61613 status to 'In Progress'
+2025-08-05 14:00:35,782 - INFO -  Added comment to ticket #61613
+2025-08-05 14:00:38,702 - INFO -  Slack notification sent for Rechelle Romero
+2025-08-05 14:00:38,705 - INFO - ============================================================
+2025-08-05 14:00:38,705 - INFO - AUTOMATION SUMMARY - 2025-08-05 14:00:38
+2025-08-05 14:00:38,705 - INFO - Duration: 0:00:32.131182
+2025-08-05 14:00:38,706 - INFO - Successful creations: 1
+2025-08-05 14:00:38,706 - INFO - Duplicates skipped: 0
+2025-08-05 14:00:38,706 - INFO - Errors encountered: 0
+2025-08-05 14:00:38,706 - INFO - Total users processed: 1
+2025-08-05 14:00:38,706 - INFO - ============================================================
