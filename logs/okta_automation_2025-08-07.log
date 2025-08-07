@@ -1,0 +1,52 @@
+2025-08-07 10:34:16,489 - INFO - ============================================================
+2025-08-07 10:34:16,517 - INFO - OKTA AUTOMATION STARTED - 2025-08-07 10:34:16
+2025-08-07 10:34:16,524 - INFO - ============================================================
+2025-08-07 10:34:16,533 - INFO - Retrieving Okta API credentials...
+2025-08-07 10:34:21,119 - INFO - Validating department-to-group mappings...
+2025-08-07 10:34:29,116 - INFO - All 19 group mappings validated successfully
+2025-08-07 10:34:29,116 - INFO - All group mappings validated successfully
+2025-08-07 10:34:29,132 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-07 10:34:34,351 - INFO - Found 1 onboarding users to process
+2025-08-07 10:34:34,351 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-07 10:34:34,356 - INFO - Processing user 1/1: Kristen Hallen — Customer Marketing Manager (Ticket #61735)
+2025-08-07 10:34:42,581 - INFO - SUCCESS: Created Okta user kristenhallen@filevine.com (Ticket #61735)
+2025-08-07 10:34:42,995 - ERROR - Failed to add user 00uymqm5fxm9s5A4o297 to group 00g2s7ry9wXTAR4k0297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaeb4jMh0vFRoGzKGz0ROp3dQ","errorCauses":[]}
+2025-08-07 10:34:42,995 - ERROR - Failed to assign user 00uymqm5fxm9s5A4o297 to any groups for department 'Marketing'
+2025-08-07 10:34:42,998 - WARNING - Group assignment failed for kristenhallen@filevine.com, department 'Marketing'
+2025-08-07 10:34:47,083 - INFO -  Updated ticket #61735 status to 'In Progress'
+2025-08-07 10:34:50,990 - INFO -  Added comment to ticket #61735
+2025-08-07 10:34:54,842 - INFO -  Slack notification sent for Kristen Hallen
+2025-08-07 10:34:54,848 - INFO - ============================================================
+2025-08-07 10:34:54,850 - INFO - AUTOMATION SUMMARY - 2025-08-07 10:34:54
+2025-08-07 10:34:54,850 - INFO - Duration: 0:00:38.362422
+2025-08-07 10:34:54,853 - INFO - Successful creations: 1
+2025-08-07 10:34:54,853 - INFO - Duplicates skipped: 0
+2025-08-07 10:34:54,853 - INFO - Errors encountered: 0
+2025-08-07 10:34:54,853 - INFO - Total users processed: 1
+2025-08-07 10:34:54,853 - INFO - ============================================================
+2025-08-07 14:00:04,459 - INFO - ============================================================
+2025-08-07 14:00:04,460 - INFO - OKTA AUTOMATION STARTED - 2025-08-07 14:00:04
+2025-08-07 14:00:04,460 - INFO - ============================================================
+2025-08-07 14:00:04,460 - INFO - Retrieving Okta API credentials...
+2025-08-07 14:00:06,954 - INFO - Validating department-to-group mappings...
+2025-08-07 14:00:15,566 - INFO - All 19 group mappings validated successfully
+2025-08-07 14:00:15,566 - INFO - All group mappings validated successfully
+2025-08-07 14:00:15,569 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-07 14:00:19,599 - INFO - Found 1 onboarding users to process
+2025-08-07 14:00:19,599 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-07 14:00:19,599 - INFO - Processing user 1/1: Andrew Lee — Prompt Engineer (Ticket #61775)
+2025-08-07 14:00:29,647 - INFO - SUCCESS: Created Okta user andrewlee@filevine.com (Ticket #61775)
+2025-08-07 14:00:30,200 - INFO - Added user 00uymw4leavK2vIOf297 to group 00g9dig6h44pNmIuE297
+2025-08-07 14:00:30,200 - INFO - Successfully assigned user 00uymw4leavK2vIOf297 to all 1 groups for department 'Research & Development'
+2025-08-07 14:00:30,200 - INFO - Successfully assigned andrewlee@filevine.com to groups for department 'Research & Development'
+2025-08-07 14:00:34,364 - INFO -  Updated ticket #61775 status to 'In Progress'
+2025-08-07 14:00:38,077 - INFO -  Added comment to ticket #61775
+2025-08-07 14:00:41,430 - INFO -  Slack notification sent for Andrew Lee
+2025-08-07 14:00:41,431 - INFO - ============================================================
+2025-08-07 14:00:41,431 - INFO - AUTOMATION SUMMARY - 2025-08-07 14:00:41
+2025-08-07 14:00:41,431 - INFO - Duration: 0:00:36.971669
+2025-08-07 14:00:41,432 - INFO - Successful creations: 1
+2025-08-07 14:00:41,434 - INFO - Duplicates skipped: 0
+2025-08-07 14:00:41,435 - INFO - Errors encountered: 0
+2025-08-07 14:00:41,435 - INFO - Total users processed: 1
+2025-08-07 14:00:41,435 - INFO - ============================================================
