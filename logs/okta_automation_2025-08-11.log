@@ -1,0 +1,36 @@
+2025-08-11 10:00:07,713 - INFO - ============================================================
+2025-08-11 10:00:07,713 - INFO - OKTA AUTOMATION STARTED - 2025-08-11 10:00:07
+2025-08-11 10:00:07,715 - INFO - ============================================================
+2025-08-11 10:00:07,715 - INFO - Retrieving Okta API credentials...
+2025-08-11 10:00:09,679 - INFO - Validating department-to-group mappings...
+2025-08-11 10:00:14,329 - INFO - All 19 group mappings validated successfully
+2025-08-11 10:00:14,329 - INFO - All group mappings validated successfully
+2025-08-11 10:00:14,331 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-11 10:00:45,747 - INFO - Found 1 onboarding users to process
+2025-08-11 10:00:45,748 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-11 10:00:45,748 - INFO - Processing user 1/1: Christopher Lope-Campos — BDR (Ticket #62013)
+2025-08-11 10:00:52,673 - INFO - SUCCESS: Created Okta user christopherlope-campos@filevine.com (Ticket #62013)
+2025-08-11 10:00:52,935 - ERROR - Failed to add user 00uyo49v44LswpNdt297 to group 00g3mhroi4GlBZHkv297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaeVlkiJxeATd2V0xuTR4I6YQ","errorCauses":[]}
+2025-08-11 10:00:52,935 - ERROR - Failed to assign user 00uyo49v44LswpNdt297 to any groups for department 'SDR - Sales Development Reps'
+2025-08-11 10:00:52,937 - WARNING - Group assignment failed for christopherlope-campos@filevine.com, department 'SDR - Sales Development Reps'
+2025-08-11 10:00:57,221 - INFO -  Updated ticket #62013 status to 'In Progress'
+2025-08-11 10:01:00,414 - INFO -  Added comment to ticket #62013
+2025-08-11 10:01:02,870 - INFO -  Slack notification sent for Christopher Lope-Campos
+2025-08-11 10:01:02,872 - INFO - ============================================================
+2025-08-11 10:01:02,874 - INFO - AUTOMATION SUMMARY - 2025-08-11 10:01:02
+2025-08-11 10:01:02,875 - INFO - Duration: 0:00:55.158666
+2025-08-11 10:01:02,875 - INFO - Successful creations: 1
+2025-08-11 10:01:02,876 - INFO - Duplicates skipped: 0
+2025-08-11 10:01:02,876 - INFO - Errors encountered: 0
+2025-08-11 10:01:02,877 - INFO - Total users processed: 1
+2025-08-11 10:01:02,877 - INFO - ============================================================
+2025-08-11 14:00:07,672 - INFO - ============================================================
+2025-08-11 14:00:07,672 - INFO - OKTA AUTOMATION STARTED - 2025-08-11 14:00:07
+2025-08-11 14:00:07,674 - INFO - ============================================================
+2025-08-11 14:00:07,674 - INFO - Retrieving Okta API credentials...
+2025-08-11 14:00:09,527 - INFO - Validating department-to-group mappings...
+2025-08-11 14:00:15,810 - INFO - All 19 group mappings validated successfully
+2025-08-11 14:00:15,810 - INFO - All group mappings validated successfully
+2025-08-11 14:00:15,810 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-11 14:00:30,243 - INFO - Found 0 onboarding users to process
+2025-08-11 14:00:30,243 - INFO - No onboarding users found. Exiting.

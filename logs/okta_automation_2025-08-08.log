@@ -9,3 +9,29 @@
 2025-08-08 14:00:13,235 - INFO - Fetching tickets from SolarWinds Service Desk...
 2025-08-08 14:00:17,280 - INFO - Found 0 onboarding users to process
 2025-08-08 14:00:17,281 - INFO - No onboarding users found. Exiting.
+2025-08-08 17:00:07,233 - INFO - ============================================================
+2025-08-08 17:00:07,234 - INFO - OKTA AUTOMATION STARTED - 2025-08-08 17:00:07
+2025-08-08 17:00:07,235 - INFO - ============================================================
+2025-08-08 17:00:07,235 - INFO - Retrieving Okta API credentials...
+2025-08-08 17:00:09,266 - INFO - Validating department-to-group mappings...
+2025-08-08 17:00:14,170 - INFO - All 19 group mappings validated successfully
+2025-08-08 17:00:14,170 - INFO - All group mappings validated successfully
+2025-08-08 17:00:14,171 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-08 17:00:18,675 - INFO - Found 1 onboarding users to process
+2025-08-08 17:00:18,675 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-08 17:00:18,675 - INFO - Processing user 1/1: Ama Nipassa — BDR (Ticket #61982)
+2025-08-08 17:00:26,605 - INFO - SUCCESS: Created Okta user amanipassa@filevine.com (Ticket #61982)
+2025-08-08 17:00:26,814 - ERROR - Failed to add user 00uynfgpyqHvIi6gr297 to group 00g3mhroi4GlBZHkv297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaeCGOHhjYdTVu16hQ0_2KIvA","errorCauses":[]}
+2025-08-08 17:00:26,815 - ERROR - Failed to assign user 00uynfgpyqHvIi6gr297 to any groups for department 'SDR - Sales Development Reps'
+2025-08-08 17:00:26,816 - WARNING - Group assignment failed for amanipassa@filevine.com, department 'SDR - Sales Development Reps'
+2025-08-08 17:00:29,926 - INFO -  Updated ticket #61982 status to 'In Progress'
+2025-08-08 17:00:32,786 - INFO -  Added comment to ticket #61982
+2025-08-08 17:00:35,110 - INFO -  Slack notification sent for Ama Nipassa
+2025-08-08 17:00:35,112 - INFO - ============================================================
+2025-08-08 17:00:35,112 - INFO - AUTOMATION SUMMARY - 2025-08-08 17:00:35
+2025-08-08 17:00:35,112 - INFO - Duration: 0:00:27.879013
+2025-08-08 17:00:35,112 - INFO - Successful creations: 1
+2025-08-08 17:00:35,114 - INFO - Duplicates skipped: 0
+2025-08-08 17:00:35,114 - INFO - Errors encountered: 0
+2025-08-08 17:00:35,114 - INFO - Total users processed: 1
+2025-08-08 17:00:35,114 - INFO - ============================================================

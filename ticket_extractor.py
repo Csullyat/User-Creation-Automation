@@ -372,8 +372,8 @@ def parse_ticket(ticket: Dict) -> Dict:
                         mgr_first_name = mgr_name_parts[0]
                         mgr_last_name = " ".join(mgr_name_parts[1:])
                         
-                        out["managerId"] = mgr.get("email", "")
-                        out["manager_name"] = f"{mgr_last_name}, {mgr_first_name}"
+                        out["managerId"] = f"{mgr_last_name}, {mgr_first_name}"
+                        out["manager"] = mgr.get("email", "")
                         out["manager_email"] = mgr.get("email", "")
                     except Exception as e:
                         print(f" Error parsing manager info for ticket {out['ticket_number']}: {e}")
