@@ -38,11 +38,9 @@ try {
     Unregister-ScheduledTask -TaskName "OktaReports-Monthly" -Confirm:$false -ErrorAction SilentlyContinue
 } catch { }
 
-$MonthlyAction = New-ScheduledTaskAction -Execute $PythonPath -Argument "send_reports.py monthly" -WorkingDirectory $WorkingDirectory
-# Create a monthly trigger that runs on the 1st day of every month
-$MonthlyTrigger = New-ScheduledTaskTrigger -Monthly -DaysOfMonth 1 -At "8:00 AM"
-
-Register-ScheduledTask -TaskName "OktaReports-Monthly" -Action $MonthlyAction -Trigger $MonthlyTrigger -Settings $Settings -Principal $Principal -Description "Send monthly Okta automation report to Slack"
+# Use schtasks for reliable monthly scheduling on the 1st of each month
+$MonthlyCommand = "schtasks /create /tn `"OktaReports-Monthly`" /tr `"$PythonPath send_reports.py monthly`" /sc monthly /d 1 /st 08:00 /sd $(Get-Date -Format 'MM/01/yyyy') /f"
+Invoke-Expression $MonthlyCommand
 
 Write-Host "Monthly report task created (1st of month at 8:00 AM)"
 

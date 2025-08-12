@@ -34,3 +34,37 @@
 2025-08-11 14:00:15,810 - INFO - Fetching tickets from SolarWinds Service Desk...
 2025-08-11 14:00:30,243 - INFO - Found 0 onboarding users to process
 2025-08-11 14:00:30,243 - INFO - No onboarding users found. Exiting.
+2025-08-11 17:00:05,827 - INFO - ============================================================
+2025-08-11 17:00:05,828 - INFO - OKTA AUTOMATION STARTED - 2025-08-11 17:00:05
+2025-08-11 17:00:05,828 - INFO - ============================================================
+2025-08-11 17:00:05,829 - INFO - Retrieving Okta API credentials...
+2025-08-11 17:00:07,783 - INFO - Validating department-to-group mappings...
+2025-08-11 17:00:12,671 - INFO - All 19 group mappings validated successfully
+2025-08-11 17:00:12,671 - INFO - All group mappings validated successfully
+2025-08-11 17:00:12,672 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-11 17:00:32,331 - INFO - Found 2 onboarding users to process
+2025-08-11 17:00:32,337 - INFO - PRODUCTION MODE - Processing all 2 users
+2025-08-11 17:00:32,337 - INFO - Processing user 1/2: Allison Stevens — BDR (Ticket #62136)
+2025-08-11 17:00:39,711 - INFO - SUCCESS: Created Okta user allisonstevens@filevine.com (Ticket #62136)
+2025-08-11 17:00:39,926 - ERROR - Failed to add user 00uyobd9ddDUhdb7U297 to group 00g3mhroi4GlBZHkv297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaeWVPrLs3WQiOSAzS21rV2uQ","errorCauses":[]}
+2025-08-11 17:00:39,926 - ERROR - Failed to assign user 00uyobd9ddDUhdb7U297 to any groups for department 'SDR - Sales Development Reps'
+2025-08-11 17:00:39,927 - WARNING - Group assignment failed for allisonstevens@filevine.com, department 'SDR - Sales Development Reps'
+2025-08-11 17:00:43,956 - INFO -  Updated ticket #62136 status to 'In Progress'
+2025-08-11 17:00:46,874 - INFO -  Added comment to ticket #62136
+2025-08-11 17:00:49,446 - INFO -  Slack notification sent for Allison Stevens
+2025-08-11 17:00:49,453 - INFO - Processing user 2/2: Justin Busch — Contractor/Partner (Ticket #62140)
+2025-08-11 17:00:55,916 - INFO - SUCCESS: Created Okta user justinbusch@filevine.com (Ticket #62140)
+2025-08-11 17:00:56,119 - ERROR - Failed to add user 00uyobelf8w6Ba6yx297 to group 00g2s7ry9mxGh8iqV297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaedO5Ma-IKTRuvM9dpAdDSnw","errorCauses":[]}
+2025-08-11 17:00:56,121 - ERROR - Failed to assign user 00uyobelf8w6Ba6yx297 to any groups for department 'Implementations'
+2025-08-11 17:00:56,123 - WARNING - Group assignment failed for justinbusch@filevine.com, department 'Implementations'
+2025-08-11 17:00:59,308 - INFO -  Updated ticket #62140 status to 'In Progress'
+2025-08-11 17:01:02,305 - INFO -  Added comment to ticket #62140
+2025-08-11 17:01:04,658 - INFO -  Slack notification sent for Justin Busch
+2025-08-11 17:01:04,659 - INFO - ============================================================
+2025-08-11 17:01:04,659 - INFO - AUTOMATION SUMMARY - 2025-08-11 17:01:04
+2025-08-11 17:01:04,659 - INFO - Duration: 0:00:58.831833
+2025-08-11 17:01:04,659 - INFO - Successful creations: 2
+2025-08-11 17:01:04,659 - INFO - Duplicates skipped: 0
+2025-08-11 17:01:04,659 - INFO - Errors encountered: 0
+2025-08-11 17:01:04,659 - INFO - Total users processed: 2
+2025-08-11 17:01:04,660 - INFO - ============================================================

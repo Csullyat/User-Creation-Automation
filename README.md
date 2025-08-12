@@ -129,9 +129,9 @@ Set up automatic report delivery to your Slack channel:
 ```
 
 **Automated Schedule:**
-- **Daily Report:** Every day at 6:00 PM
-- **Weekly Report:** Mondays at 9:00 AM  
-- **Monthly Report:** 1st of each month at 8:00 AM
+- **Daily Report:** Every day at 5:00 PM
+- **Weekly Report:** Mondays at 8:00 AM  
+- **Monthly Report:** 1st of each month at 8:00 AM (ONLY on the 1st, not daily)
 
 **Manual Slack Reports:**
 ```bash
