@@ -8,3 +8,39 @@
 2025-08-12 10:00:10,417 - INFO - Fetching tickets from SolarWinds Service Desk...
 2025-08-12 10:00:14,499 - INFO - Found 0 onboarding users to process
 2025-08-12 10:00:14,500 - INFO - No onboarding users found. Exiting.
+2025-08-12 14:00:07,131 - INFO - ============================================================
+2025-08-12 14:00:07,131 - INFO - OKTA AUTOMATION STARTED - 2025-08-12 14:00:07
+2025-08-12 14:00:07,132 - INFO - ============================================================
+2025-08-12 14:00:07,132 - INFO - Retrieving Okta API credentials...
+2025-08-12 14:00:09,142 - INFO - Validating department-to-group mappings...
+2025-08-12 14:00:14,392 - INFO - All 19 group mappings validated successfully
+2025-08-12 14:00:14,392 - INFO - All group mappings validated successfully
+2025-08-12 14:00:14,394 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-12 14:00:19,036 - INFO - Found 0 onboarding users to process
+2025-08-12 14:00:19,036 - INFO - No onboarding users found. Exiting.
+2025-08-12 17:00:07,053 - INFO - ============================================================
+2025-08-12 17:00:07,053 - INFO - OKTA AUTOMATION STARTED - 2025-08-12 17:00:07
+2025-08-12 17:00:07,055 - INFO - ============================================================
+2025-08-12 17:00:07,056 - INFO - Retrieving Okta API credentials...
+2025-08-12 17:00:08,981 - INFO - Validating department-to-group mappings...
+2025-08-12 17:00:14,197 - INFO - All 19 group mappings validated successfully
+2025-08-12 17:00:14,197 - INFO - All group mappings validated successfully
+2025-08-12 17:00:14,198 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-12 17:00:18,190 - INFO - Found 1 onboarding users to process
+2025-08-12 17:00:18,190 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-12 17:00:18,191 - INFO - Processing user 1/1: Mark Knight — Manager, Business Development (Ticket #62218)
+2025-08-12 17:00:24,505 - INFO - SUCCESS: Created Okta user markknight@filevine.com (Ticket #62218)
+2025-08-12 17:00:24,704 - ERROR - Failed to add user 00uyotsx2okDMFDQr297 to group 00g3mhroi4GlBZHkv297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaeqCAb89LnRNyl8xQZcB8QRw","errorCauses":[]}
+2025-08-12 17:00:24,705 - ERROR - Failed to assign user 00uyotsx2okDMFDQr297 to any groups for department 'SDR - Sales Development Reps'
+2025-08-12 17:00:24,705 - WARNING - Group assignment failed for markknight@filevine.com, department 'SDR - Sales Development Reps'
+2025-08-12 17:00:27,980 - INFO -  Updated ticket #62218 status to 'In Progress'
+2025-08-12 17:00:30,714 - INFO -  Added comment to ticket #62218
+2025-08-12 17:00:32,892 - INFO -  Slack notification sent for Mark Knight
+2025-08-12 17:00:32,893 - INFO - ============================================================
+2025-08-12 17:00:32,894 - INFO - AUTOMATION SUMMARY - 2025-08-12 17:00:32
+2025-08-12 17:00:32,894 - INFO - Duration: 0:00:25.840316
+2025-08-12 17:00:32,894 - INFO - Successful creations: 1
+2025-08-12 17:00:32,897 - INFO - Duplicates skipped: 0
+2025-08-12 17:00:32,897 - INFO - Errors encountered: 0
+2025-08-12 17:00:32,897 - INFO - Total users processed: 1
+2025-08-12 17:00:32,897 - INFO - ============================================================

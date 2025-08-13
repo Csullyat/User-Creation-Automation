@@ -63,7 +63,8 @@ def build_okta_payload(user):
             "department": user.get("department", ""),
             "title": user.get("title", ""),
             "managerId": user.get("managerId", ""),
-            "manager": user.get("manager_name", ""),
+            # Use manager_email for Okta's 'manager' field
+            "manager": user.get("manager_email", ""),
             "preferredLanguage": "en",
             "timezone": user.get("timezone", "America/Denver"),  # Use timezone from address parsing
             "organization": "Filevine",
