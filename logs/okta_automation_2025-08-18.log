@@ -1,0 +1,46 @@
+2025-08-18 10:00:06,575 - INFO - ============================================================
+2025-08-18 10:00:06,575 - INFO - OKTA AUTOMATION STARTED - 2025-08-18 10:00:06
+2025-08-18 10:00:06,576 - INFO - ============================================================
+2025-08-18 10:00:06,576 - INFO - Retrieving Okta API credentials...
+2025-08-18 10:00:08,392 - INFO - Validating department-to-group mappings...
+2025-08-18 10:00:13,605 - INFO - All 19 group mappings validated successfully
+2025-08-18 10:00:13,605 - INFO - All group mappings validated successfully
+2025-08-18 10:00:13,607 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-18 10:00:30,194 - INFO - Found 0 onboarding users to process
+2025-08-18 10:00:30,194 - INFO - No onboarding users found. Exiting.
+2025-08-18 14:00:06,362 - INFO - ============================================================
+2025-08-18 14:00:06,362 - INFO - OKTA AUTOMATION STARTED - 2025-08-18 14:00:06
+2025-08-18 14:00:06,363 - INFO - ============================================================
+2025-08-18 14:00:06,363 - INFO - Retrieving Okta API credentials...
+2025-08-18 14:00:08,226 - INFO - Validating department-to-group mappings...
+2025-08-18 14:00:13,329 - INFO - All 19 group mappings validated successfully
+2025-08-18 14:00:13,329 - INFO - All group mappings validated successfully
+2025-08-18 14:00:13,329 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-18 14:00:21,168 - INFO - Found 3 onboarding users to process
+2025-08-18 14:00:21,168 - INFO - PRODUCTION MODE - Processing all 3 users
+2025-08-18 14:00:21,168 - INFO - Processing user 1/3: Garret Lopez — Product Implementation Consultant (Ticket #62613)
+2025-08-18 14:00:29,111 - INFO - SUCCESS: Created Okta user garretlopez@filevine.com (Ticket #62613)
+2025-08-18 14:00:29,323 - ERROR - Failed to add user 00uyr5u8mzHESse9D297 to group 00g2s7ry9mxGh8iqV297: 501 - {"errorCode":"E0000060","errorSummary":"Unsupported operation.","errorLink":"E0000060","errorId":"oaek2KAjJ1CRN27C8ml-huMFg","errorCauses":[]}
+2025-08-18 14:00:29,323 - ERROR - Failed to assign user 00uyr5u8mzHESse9D297 to any groups for department 'Implementations'
+2025-08-18 14:00:29,324 - WARNING - Group assignment failed for garretlopez@filevine.com, department 'Implementations'
+2025-08-18 14:00:32,401 - INFO -  Updated ticket #62613 status to 'In Progress'
+2025-08-18 14:00:35,434 - INFO -  Added comment to ticket #62613
+2025-08-18 14:00:37,753 - INFO -  Slack notification sent for Garret Lopez
+2025-08-18 14:00:37,753 - INFO - Processing user 2/3: April Mayhew — Paralegal (Ticket #62616)
+2025-08-18 14:00:46,313 - INFO - SUCCESS: Created Okta user aprilmayhew@filevine.com (Ticket #62616)
+2025-08-18 14:00:46,524 - INFO - Added user 00uyr5we0fYkPbLEr297 to group 00gcyl6onnkr96V2Q297
+2025-08-18 14:00:46,524 - INFO - Successfully assigned user 00uyr5we0fYkPbLEr297 to all 1 groups for department 'Legal'
+2025-08-18 14:00:46,525 - INFO - Successfully assigned aprilmayhew@filevine.com to groups for department 'Legal'
+2025-08-18 14:00:49,609 - INFO -  Updated ticket #62616 status to 'In Progress'
+2025-08-18 14:00:52,211 - INFO -  Added comment to ticket #62616
+2025-08-18 14:00:54,287 - INFO -  Slack notification sent for April Mayhew
+2025-08-18 14:00:54,288 - INFO - Processing user 3/3: Nathan Brenengen — Expert Team Trainer (Ticket #62608)
+2025-08-18 14:00:54,670 - WARNING -  DUPLICATE: User nathanbrenengen@filevine.com already exists (Ticket #62608)
+2025-08-18 14:00:54,671 - INFO - ============================================================
+2025-08-18 14:00:54,671 - INFO - AUTOMATION SUMMARY - 2025-08-18 14:00:54
+2025-08-18 14:00:54,671 - INFO - Duration: 0:00:48.309297
+2025-08-18 14:00:54,671 - INFO - Successful creations: 3
+2025-08-18 14:00:54,671 - INFO - Duplicates skipped: 0
+2025-08-18 14:00:54,672 - INFO - Errors encountered: 0
+2025-08-18 14:00:54,672 - INFO - Total users processed: 3
+2025-08-18 14:00:54,672 - INFO - ============================================================

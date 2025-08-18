@@ -1,0 +1,30 @@
+2025-08-14 10:00:07,287 - INFO - ============================================================
+2025-08-14 10:00:07,287 - INFO - OKTA AUTOMATION STARTED - 2025-08-14 10:00:07
+2025-08-14 10:00:07,287 - INFO - ============================================================
+2025-08-14 10:00:07,287 - INFO - Retrieving Okta API credentials...
+2025-08-14 10:00:09,252 - INFO - Validating department-to-group mappings...
+2025-08-14 10:00:13,827 - INFO - All 19 group mappings validated successfully
+2025-08-14 10:00:13,827 - INFO - All group mappings validated successfully
+2025-08-14 10:00:13,827 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-14 10:00:29,484 - INFO - Found 0 onboarding users to process
+2025-08-14 10:00:29,484 - INFO - No onboarding users found. Exiting.
+2025-08-14 14:00:06,838 - INFO - ============================================================
+2025-08-14 14:00:06,838 - INFO - OKTA AUTOMATION STARTED - 2025-08-14 14:00:06
+2025-08-14 14:00:06,839 - INFO - ============================================================
+2025-08-14 14:00:06,839 - INFO - Retrieving Okta API credentials...
+2025-08-14 14:00:08,845 - INFO - Validating department-to-group mappings...
+2025-08-14 14:00:13,420 - INFO - All 19 group mappings validated successfully
+2025-08-14 14:00:13,420 - INFO - All group mappings validated successfully
+2025-08-14 14:00:13,421 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-14 14:00:26,131 - INFO - Found 0 onboarding users to process
+2025-08-14 14:00:26,131 - INFO - No onboarding users found. Exiting.
+2025-08-14 17:00:06,252 - INFO - ============================================================
+2025-08-14 17:00:06,252 - INFO - OKTA AUTOMATION STARTED - 2025-08-14 17:00:06
+2025-08-14 17:00:06,253 - INFO - ============================================================
+2025-08-14 17:00:06,253 - INFO - Retrieving Okta API credentials...
+2025-08-14 17:00:08,230 - INFO - Validating department-to-group mappings...
+2025-08-14 17:00:12,655 - INFO - All 19 group mappings validated successfully
+2025-08-14 17:00:12,656 - INFO - All group mappings validated successfully
+2025-08-14 17:00:12,656 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-14 17:00:32,730 - INFO - Found 0 onboarding users to process
+2025-08-14 17:00:32,730 - INFO - No onboarding users found. Exiting.

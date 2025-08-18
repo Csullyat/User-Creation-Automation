@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Test timezone parsing for different states"""
 
-from ticket_extractor import parse_address
+
 
 # Test addresses for each timezone
 test_addresses = [
@@ -17,13 +17,7 @@ test_addresses = [
 
 print("Testing timezone assignments by state:\n")
 
-for address, description in test_addresses:
-    result = parse_address(address)
-    print(f"{description}:")
-    print(f"  Address: {address}")
-    print(f"  State: {result['state']}")
-    print(f"  Timezone: {result['timezone']}")
-    print()
+
 
 # Summary of expected timezones
 print("Expected timezone mappings:")
