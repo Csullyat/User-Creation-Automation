@@ -70,7 +70,7 @@ def fetch_page(page: int, per_page: int) -> List[Dict]:
 
     return resp.json()
 
-def fetch_tickets(per_page: int = 100, max_pages: int = 20, workers: int = 30) -> List[Dict]:
+def fetch_tickets(per_page: int = 100, max_pages: int = 40, workers: int = 30) -> List[Dict]:
     all_tickets = []
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = [executor.submit(fetch_page, page, per_page) for page in range(1, max_pages + 1)]
@@ -106,10 +106,40 @@ def parse_ticket(ticket: Dict) -> Dict:
             "countryCode": "US"
         }
 
+        # Parse custom_fields_values as a list of dicts
+
+        cf = ticket.get("custom_fields_values", [])
+        if isinstance(cf, list):
+            for field in cf:
+                fname = field.get("name")
+                fval = field.get("value")
+                if fname == "New Employee Name":
+                    out["name"] = fval
+                elif fname == "New Employee Title":
+                    out["title"] = fval
+                elif fname == "New Employee Department":
+                    out["department"] = fval
+                elif fname == "streetAddress":
+                    out["streetAddress"] = fval
+                elif fname == "city":
+                    out["city"] = fval
+                elif fname == "state" or fname.startswith("state - Formatted"):
+                    out["state"] = fval
+                elif fname == "zipCode":
+                    out["zipCode"] = fval
+                elif fname == "countryCode" or fname.startswith("countryCode - Formatted"):
+                    out["countryCode"] = fval
+                elif fname == "Reports to":
+                    # Try to extract manager email if present
+                    user_obj = field.get("user")
+                    if user_obj and "email" in user_obj:
+                        out["manager_email"] = user_obj["email"]
+                    else:
+                        out["manager_email"] = None
+
         # Track required fields to ensure they're all present
         required_fields = {"name", "title", "department"}
-        found_fields = set()
-
+        found_fields = {k for k in required_fields if out.get(k)}
 
         # If name wasn't found in custom fields, try ticket name
         if "name" not in found_fields:
@@ -209,6 +239,10 @@ if __name__ == "__main__":
     try:
         tickets = fetch_tickets()
         users = filter_onboarding_users(tickets)
-        print_users(users)
+        print(f"\nParsed onboarding users: {len(users)}")
+        for i, user in enumerate(users, 1):
+            print(f"\n--- User #{i} ---")
+            for k, v in user.items():
+                print(f"{k:>16}: {v}")
     except Exception as e:
         print(f" Script error: {e}")

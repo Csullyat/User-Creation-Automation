@@ -1,0 +1,56 @@
+2025-08-19 10:00:09,238 - INFO - ============================================================
+2025-08-19 10:00:09,238 - INFO - OKTA AUTOMATION STARTED - 2025-08-19 10:00:09
+2025-08-19 10:00:09,238 - INFO - ============================================================
+2025-08-19 10:00:09,238 - INFO - Retrieving Okta API credentials...
+2025-08-19 10:00:11,147 - INFO - Validating department-to-group mappings...
+2025-08-19 10:00:15,925 - INFO - All 19 group mappings validated successfully
+2025-08-19 10:00:15,925 - INFO - All group mappings validated successfully
+2025-08-19 10:00:15,927 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-19 10:00:20,225 - INFO - Found 0 onboarding users to process
+2025-08-19 10:00:20,226 - INFO - No onboarding users found. Exiting.
+2025-08-19 10:36:16,825 - INFO - ============================================================
+2025-08-19 10:36:16,825 - INFO - OKTA AUTOMATION STARTED - 2025-08-19 10:36:16
+2025-08-19 10:36:16,825 - INFO - ============================================================
+2025-08-19 10:36:16,825 - INFO - Retrieving Okta API credentials...
+2025-08-19 10:36:18,640 - INFO - Validating department-to-group mappings...
+2025-08-19 10:36:23,848 - INFO - All 19 group mappings validated successfully
+2025-08-19 10:36:23,848 - INFO - All group mappings validated successfully
+2025-08-19 10:36:23,848 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-19 10:36:27,890 - INFO - Found 0 onboarding users to process
+2025-08-19 10:36:27,890 - INFO - No onboarding users found. Exiting.
+2025-08-19 10:37:32,803 - INFO - ============================================================
+2025-08-19 10:37:32,803 - INFO - OKTA AUTOMATION STARTED - 2025-08-19 10:37:32
+2025-08-19 10:37:32,803 - INFO - ============================================================
+2025-08-19 10:37:32,803 - INFO - Retrieving Okta API credentials...
+2025-08-19 10:37:34,594 - INFO - Validating department-to-group mappings...
+2025-08-19 10:37:38,822 - INFO - All 19 group mappings validated successfully
+2025-08-19 10:37:38,822 - INFO - All group mappings validated successfully
+2025-08-19 10:37:38,822 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-19 10:37:45,702 - INFO - Found 0 onboarding users to process
+2025-08-19 10:37:45,702 - INFO - No onboarding users found. Exiting.
+2025-08-19 10:58:31,609 - INFO - ============================================================
+2025-08-19 10:58:31,609 - INFO - OKTA AUTOMATION STARTED - 2025-08-19 10:58:31
+2025-08-19 10:58:31,610 - INFO - ============================================================
+2025-08-19 10:58:31,610 - INFO - Retrieving Okta API credentials...
+2025-08-19 10:58:33,373 - INFO - Validating department-to-group mappings...
+2025-08-19 10:58:38,989 - INFO - All 19 group mappings validated successfully
+2025-08-19 10:58:38,989 - INFO - All group mappings validated successfully
+2025-08-19 10:58:38,989 - INFO - Fetching tickets from SolarWinds Service Desk...
+2025-08-19 10:58:45,083 - INFO - Found 1 onboarding users to process
+2025-08-19 10:58:45,083 - INFO - PRODUCTION MODE - Processing all 1 users
+2025-08-19 10:58:45,083 - INFO - Processing user 1/1: Robert Lin — Senior Software Engineer I (Ticket #62649)
+2025-08-19 10:58:52,307 - INFO - SUCCESS: Created Okta user robertlin@filevine.com (Ticket #62649)
+2025-08-19 10:58:52,749 - INFO - Added user 00uyrow6aqYnhW7j9297 to group 00g9dig6h44pNmIuE297
+2025-08-19 10:58:52,749 - INFO - Successfully assigned user 00uyrow6aqYnhW7j9297 to all 1 groups for department 'Research & Development'
+2025-08-19 10:58:52,749 - INFO - Successfully assigned robertlin@filevine.com to groups for department 'Research & Development'
+2025-08-19 10:58:55,477 - INFO -  Updated ticket #62649 status to 'In Progress'
+2025-08-19 10:58:58,062 - INFO -  Added comment to ticket #62649
+2025-08-19 10:59:00,260 - INFO -  Slack notification sent for Robert Lin
+2025-08-19 10:59:00,261 - INFO - ============================================================
+2025-08-19 10:59:00,261 - INFO - AUTOMATION SUMMARY - 2025-08-19 10:59:00
+2025-08-19 10:59:00,261 - INFO - Duration: 0:00:28.651481
+2025-08-19 10:59:00,261 - INFO - Successful creations: 1
+2025-08-19 10:59:00,261 - INFO - Duplicates skipped: 0
+2025-08-19 10:59:00,261 - INFO - Errors encountered: 0
+2025-08-19 10:59:00,261 - INFO - Total users processed: 1
+2025-08-19 10:59:00,261 - INFO - ============================================================
